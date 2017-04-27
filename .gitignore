@@ -1,2 +1,4 @@
-/node_modules/*
-/assets/*
+node_modules
+assets
+public
+npm-debug.log
