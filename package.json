@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/dzmitROCK/start/issues"
   },
-  "homepage": "https://github.com/dzmitROCK/start#readme"
+  "homepage": "https://github.com/dzmitROCK/start#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
 }
