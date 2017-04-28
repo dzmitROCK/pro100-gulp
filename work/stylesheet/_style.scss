@@ -1,11 +1,26 @@
+body {
+    font-family: 'opsans', sans-serif;
+}
+
+$aqua: aqua;
+header {
+    background-color: darken($aqua, 30%);
+    color: #fff;
+}
+
 #article {
-    background-color: #eae;
+    background-color: $aqua;
+    img {
+    	width: 100%;
+    }
 }
 
 #sidebar {
-    background-color: #aea;
+    background-color: darken($aqua, 15%);
+    color: #fff;
 }
 
 #footer {
-    background-color: #eee;
+    background-color: darken($aqua, 30%);
+    color: #fff;
 }

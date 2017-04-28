@@ -20,7 +20,7 @@ gulp.task('clean', function() { // удаляет всю папку public
 
 // Компиляция pug 
 gulp.task('pug', function buildHTML() {
-    return gulp.src(['./work/html/**/*.pug', '!./work/html/favicon/**', '!./work/html/layouts/**', '!./work/html/include/**']) // берём все файлы pug в папках и подпапках 
+    return gulp.src(['./work/html/*.pug']) // берём все файлы
         .pipe(plumber()) // обрабатываем на ошибки
         .pipe(pug({ // компилим в html
             pretty: false
@@ -85,7 +85,7 @@ gulp.task('serve', function() {
 
 // Компилим sass || scss
 gulp.task('sass', function() {
-    return gulp.src("./work/stylesheet/**/*.+(scss|sass)") // берём все файлы
+    return gulp.src("./work/stylesheet/**/*.scss") // берём все файлы
         .pipe(sass.sync().on('error', sass.logError)) // ловим ошибки
         .pipe(autoprefixer(['last 5 versions'], { cascade: true })) // добавляем префиксы
         .pipe(cssnano()) // сжимаем
