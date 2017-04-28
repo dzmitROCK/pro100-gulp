@@ -2,11 +2,9 @@ extends layouts/app.pug
 block title
 	title Стартовый шаблон для вёрстки
 block content
-	.container
-			.row
-				article#article.col-sm-8.col-md-8.col-lg-8
-					
-						h1 Контент
-						img(src="images/gulp.png" alt="gulp" title="gulp").img-responsive
-						p Далеко-далеко за словесными горами в стране, гласных и согласных живут рыбные тексты. Буквенных агенство, страна не он сих одна последний своего рыбными пунктуация моей своих предупреждал, выйти, бросил рот инициал лучше над.
-				include include/sidebar.pug
+	.row
+		article#article.medium-8.columns
+			h1 Контент
+			img(src="images/gulp.png" alt="gulp" title="gulp").img-responsive
+			p Далеко-далеко за словесными горами в стране, гласных и согласных живут рыбные тексты. Буквенных агенство, страна не он сих одна последний своего рыбными пунктуация моей своих предупреждал, выйти, бросил рот инициал лучше над.
+		include include/sidebar.pug
