@@ -1,4 +1,4 @@
-![](https://api.fnkr.net/testimg/1000x200/30D5C8/ffc0cb/?text=start+gulp+project)
+![](https://github.com/dzmitROCK/start/blob/master/work/favicon/android-chrome-512x512.png?raw=true)
 # Стартовый шаблон для вёрстки *
 > *В разработке...
 #### Документация в разработке
