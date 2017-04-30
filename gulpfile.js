@@ -1,5 +1,6 @@
-var gulp = require('gulp'); // Сам галп
-browserSync = require('browser-sync').create(), // LiveReload перезагрузка страницы при изменениях
+'use strict';
+var gulp = require('gulp'), // Сам галп
+    browserSync = require('browser-sync').create(), // LiveReload перезагрузка страницы при изменениях
     sass = require('gulp-sass'), // подключаем компилятор sass || scss
     autoprefixer = require('gulp-autoprefixer'), // пакет для префиксов CSS
     cssnano = require('gulp-cssnano'), // пакет для минификации CSS
@@ -10,8 +11,11 @@ browserSync = require('browser-sync').create(), // LiveReload перезагру
     data = require('gulp-data'), // работаем с json
     imagemin = require('gulp-imagemin'), // Подключаем библиотеку для работы с изображениями
     pngquant = require('imagemin-pngquant'), // Подключаем библиотеку для работы с png
+    sourcemaps = require('gulp-sourcemaps'),
+    gulpIf = require('gulp-if'),
     cache = require('gulp-cache'); // Подключаем библиотеку кеширования
 
+const isDev = true; //
 
 // del
 gulp.task('clean', function() { // удаляет всю папку public
@@ -23,7 +27,7 @@ gulp.task('pug', function buildHTML() {
     return gulp.src(['./work/html/*.pug']) // берём все файлы
         .pipe(plumber()) // обрабатываем на ошибки
         .pipe(pug({ // компилим в html
-            pretty: false
+            pretty: true // true не сжимем html, false сжимаем
         }))
         .pipe(gulp.dest("public"))
 });
@@ -45,9 +49,10 @@ gulp.task('img', function() {
 });
 
 // Копируем fonts
-gulp.task('fonts', function() {
-    return gulp.src('./work/fonts/*') // берём все в папке fonts
+gulp.task('fonts', function(done) {
+    gulp.src('./work/fonts/*') // берём все в папке fonts
         .pipe(gulp.dest('./public/fonts')); // переносим в public
+    done();
 });
 // При изменении fonts
 gulp.task('fonts-watch', function(done) { // таск выполняется если в папке fonts были изменения
@@ -59,9 +64,10 @@ gulp.task('fonts-watch', function(done) { // таск выполняется е�
 });
 
 // Копируем favicon
-gulp.task('favicon', function() {
-    return gulp.src('./work/favicon/**/*')
+gulp.task('favicon', function(done) {
+    gulp.src('./work/favicon/**/*')
         .pipe(gulp.dest('./public/favicon'));
+    done();
 });
 // При изменении favicon
 gulp.task('favicon-watch', function(done) { // таск выполняется если в папке favicon были изменения
@@ -74,29 +80,12 @@ gulp.task('favicon-watch', function(done) { // таск выполняется �
 
 
 // Запускаем сервер
-gulp.task('serve', function() {
+gulp.task('serve', ['clean', 'fonts', 'favicon', 'img', 'sass', 'pug'], function() {
 
     browserSync.init({
         server: "./public", // сервер в папке public
         notify: false // отключаем чудо-надоедливые посказки browser-sync
     });
-
-});
-
-// Компилим sass || scss
-gulp.task('sass', function() {
-    return gulp.src("./work/stylesheet/**/*.scss") // берём все файлы
-        .pipe(sass.sync().on('error', sass.logError)) // ловим ошибки
-        .pipe(autoprefixer(['last 5 versions'], { cascade: true })) // добавляем префиксы
-        .pipe(cssnano()) // сжимаем
-        .pipe(gulp.dest("./public/stylesheet")) // выгружаем
-        .pipe(browserSync.stream()); // инжектим без перезагрузки
-});
-
-
-// defaul task
-gulp.task('default', ['clean', 'fonts', 'favicon', 'img', 'sass', 'pug', 'serve'], function() { // выполняем таски по порядку ['clean', 'fonts', 'favicon', 'sass', 'pug', 'serve']
-
     gulp.watch('./work/stylesheet/**/*.scss', ['sass']); // наблюдаем за файлами и при изменениях выполняем таск ['sass']
     gulp.watch('./work/html/**/*.pug', ['pug-watch']); // тоже только другой таск
     gulp.watch('./work/fonts/**/*', ['fonts-watch']); // соответственно вышеперечисленных
@@ -104,7 +93,23 @@ gulp.task('default', ['clean', 'fonts', 'favicon', 'img', 'sass', 'pug', 'serve'
 
 });
 
+// Компилим sass || scss
+gulp.task('sass', function() {
+    return gulp.src("./work/stylesheet/**/*.scss") // берём все файлы
+        .pipe(gulpIf(isDev, sourcemaps.init()))
+        .pipe(sass.sync().on('error', sass.logError)) // ловим ошибки
+        .pipe(autoprefixer(['last 5 versions'], { cascade: true })) // добавляем префиксы
+        .pipe(cssnano()) // сжимаем
+        .pipe(gulpIf(isDev, sourcemaps.write()))
+        .pipe(gulp.dest("./public/stylesheet")) // выгружаем
+        .pipe(gulpIf(isDev,browserSync.stream())); // инжектим без перезагрузки
+});
+
+
+// defaul task
+gulp.task('default', ['serve']);
+
 // prod task
 gulp.task('prod', ['clean', 'fonts', 'favicon', 'img', 'sass', 'pug'], function() { // выполняем таски по порядку ['clean', 'fonts', 'favicon', 'sass', 'pug', 'serve']
-
+console.log('YEEEEEEEEEEHHHHHHHHHHOOOOOOOOOO');
 });
