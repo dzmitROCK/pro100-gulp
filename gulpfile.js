@@ -151,6 +151,7 @@ gulp.task('serve', ['clean', 'fonts', 'scripts', 'favicon', 'img', 'sass', 'pug'
     });
 });
 
+
 // Компилим sass || scss
 gulp.task('sass', function() {
     return gulp.src(path.sass) // берём все файлы
