@@ -14,10 +14,12 @@ const gulp = require('gulp'), // Сам галп
     pngquant = require('imagemin-pngquant'), // Подключаем библиотеку для работы с png
     sourcemaps = require('gulp-sourcemaps'),
     gulpIf = require('gulp-if'),
+    zip = require('gulp-zip'),
     cache = require('gulp-cache'); // Подключаем библиотеку кеширования
 
 // Опции
 const options = {
+    appName: 'app',
     isDev: true, // при разработке true, если хотите скомпилировать в продакшен ставим false
     htmlMin: false, // false не сжимем html на выходе, true сжимаем
     notify: false, // false отключает чудо-надоедливые посказки browser-sync
@@ -59,35 +61,30 @@ gulp.task('pug', function buildHTML() {
         .pipe(pug({ // компилим в html
             pretty: !options.htmlMin
         }))
-        .pipe(gulp.dest(options.distFolder));
-});
-
-
-gulp.task('pug-watch', ['pug'], function(done) {
-    browserSync.reload();
-    done();
+        .pipe(gulp.dest(options.distFolder))
+        .pipe(browserSync.stream());
 });
 
 
 // Работа с картинками
 gulp.task('img', function() {
     return gulp.src(path.images) // Берем все изображения
-       //.pipe(newer(options.distFolder + '/images'))
+        //.pipe(newer(options.distFolder + '/images'))
         .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
             interlaced: true,
             progressive: true,
             svgoPlugins: [{ removeViewBox: false }],
             use: [pngquant()]
         })))
-        .pipe(gulp.dest(options.distFolder + '/images')); // Выгружаем на продакшен
+        .pipe(gulp.dest(options.distFolder + '/images')) // Выгружаем на продакшен
+        .pipe(browserSync.stream());
 });
 
 
 // Копируем fonts
-gulp.task('fonts', function(done) {
-    gulp.src(path.fonts) // берём все в папке fonts
+gulp.task('fonts', function() {
+    return gulp.src(path.fonts) // берём все в папке fonts
         .pipe(gulp.dest(options.distFolder + '/fonts')); // переносим в public
-    done();
 });
 
 
@@ -102,8 +99,8 @@ gulp.task('fonts-watch', function(done) { // таск выполняется е�
 
 
 // Копируем favicon
-gulp.task('favicon', function(done) {
-    gulp.src(path.favicon)
+gulp.task('favicon', function() {
+    return gulp.src(path.favicon)
         .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
             interlaced: true,
             progressive: true,
@@ -111,7 +108,6 @@ gulp.task('favicon', function(done) {
             use: [pngquant()]
         })))
         .pipe(gulp.dest(options.distFolder + '/favicon'));
-    done();
 });
 
 
@@ -132,7 +128,7 @@ gulp.task('favicon-watch', function(done) { // таск выполняется �
 
 
 // Запускаем сервер
-gulp.task('serve', ['clean', 'fonts', 'scripts', 'favicon', 'img', 'sass', 'pug'], function() {
+gulp.task('serve', ['clean', 'fonts', 'scripts', 'favicon', 'img', 'sass', 'pug', 'watch'], function() {
 
     browserSync.init({
         server: options.distFolder,
@@ -169,19 +165,30 @@ gulp.task('js-watch', ['scripts'], function(done) {
     done();
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function() {
     gulp.watch(path.sass, ['sass']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.allPug, ['pug-watch']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(path.allPug, ['pug']); // наблюдаем за файлами и при изменениях выполняем таск
     gulp.watch(path.fonts, ['fonts-watch']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.images, ['img-watch']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(path.images, ['img']); // наблюдаем за файлами и при изменениях выполняем таск
     gulp.watch(path.js, ['js-watch']); // наблюдаем за файлами и при изменениях выполняем таск
-})
+});
+
+
 // defaul task
-gulp.task('default', ['watch' ,'serve'], function() {
+gulp.task('default', ['serve'], function() {
     console.log('Поехали!!!');
 });
+
 
 // prod task
 gulp.task('prod', ['clean', 'fonts', 'favicon', 'scripts', 'img', 'sass', 'pug'], function() {
     console.log('А я вот день рождения не буду справлять...\nвсё зае....\nэммм...\nВсё скомпилировано, сэр!!!');
+});
+
+
+// Архивирование проекта
+gulp.task('zip', ['prod'], function() {
+    gulp.src(options.distFolder + '/**/*')
+        .pipe(zip(options.appName + '.zip'))
+        .pipe(gulp.dest(''));
 });
