@@ -59,7 +59,7 @@ gulp.task('pug', function buildHTML() {
         .pipe(pug({ // компилим в html
             pretty: !options.htmlMin
         }))
-        .pipe(gulp.dest(options.distFolder))
+        .pipe(gulp.dest(options.distFolder));
 });
 
 
@@ -72,6 +72,7 @@ gulp.task('pug-watch', ['pug'], function(done) {
 // Работа с картинками
 gulp.task('img', function() {
     return gulp.src(path.images) // Берем все изображения
+       //.pipe(newer(options.distFolder + '/images'))
         .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
             interlaced: true,
             progressive: true,
@@ -137,13 +138,6 @@ gulp.task('serve', ['clean', 'fonts', 'scripts', 'favicon', 'img', 'sass', 'pug'
         server: options.distFolder,
         notify: options.notify
     });
-
-    gulp.watch(path.sass, ['sass']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.allPug, ['pug-watch']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.fonts, ['fonts-watch']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.images, ['img-watch']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.js, ['js-watch']); // наблюдаем за файлами и при изменениях выполняем таск
-
 });
 
 // Компилим sass || scss
@@ -175,9 +169,15 @@ gulp.task('js-watch', ['scripts'], function(done) {
     done();
 });
 
-
+gulp.task('watch', function () {
+    gulp.watch(path.sass, ['sass']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(path.allPug, ['pug-watch']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(path.fonts, ['fonts-watch']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(path.images, ['img-watch']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(path.js, ['js-watch']); // наблюдаем за файлами и при изменениях выполняем таск
+})
 // defaul task
-gulp.task('default', ['serve'], function() {
+gulp.task('default', ['watch' ,'serve'], function() {
     console.log('Поехали!!!');
 });
 
