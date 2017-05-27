@@ -8,6 +8,7 @@
 ##### Использование
 `yarn start` запуск разработки  
 `yarn production` компиляция проекта в продакшен  
+`yarn zip` архивация проекта
 ### PageSpeed Tools > Insights
 #### Mobile > 85
 #### Desktop > 97
