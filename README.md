@@ -4,10 +4,10 @@
 #### Документация в разработке
 ##### Установка
 `git clone https://github.com/dzmitROCK/start.git`  
-`npm install`
+`yarn install`
 ##### Использование
-`npm start` запуск разработки  
-`npm run production` конечная компиляция всего проекта 
+`yarn start` запуск разработки  
+`yarn run production` конечная компиляция всего проекта 
 ##### Использованы препроцессоры
 * scss и sass
 * pug
