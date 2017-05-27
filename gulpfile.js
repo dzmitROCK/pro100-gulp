@@ -14,6 +14,7 @@ const gulp = require('gulp'), // Сам галп
     pngquant = require('imagemin-pngquant'), // Подключаем библиотеку для работы с png
     sourcemaps = require('gulp-sourcemaps'),
     gulpIf = require('gulp-if'),
+    size = require('gulp-size'),
     zip = require('gulp-zip'),
     cache = require('gulp-cache'); // Подключаем библиотеку кеширования
 
@@ -61,6 +62,9 @@ gulp.task('pug', function buildHTML() {
         .pipe(pug({ // компилим в html
             pretty: !options.htmlMin
         }))
+        .pipe(size({
+            title: 'pug'
+        }))
         .pipe(gulp.dest(options.distFolder))
         .pipe(browserSync.stream());
 });
@@ -76,6 +80,9 @@ gulp.task('img', function() {
             svgoPlugins: [{ removeViewBox: false }],
             use: [pngquant()]
         })))
+        .pipe(size({
+            title: 'images'
+        }))
         .pipe(gulp.dest(options.distFolder + '/images')) // Выгружаем на продакшен
         .pipe(browserSync.stream());
 });
@@ -84,6 +91,9 @@ gulp.task('img', function() {
 // Копируем fonts
 gulp.task('fonts', function() {
     return gulp.src(path.fonts) // берём все в папке fonts
+        .pipe(size({
+            title: 'fonts'
+        }))
         .pipe(gulp.dest(options.distFolder + '/fonts')); // переносим в public
 });
 
@@ -107,6 +117,9 @@ gulp.task('favicon', function() {
             svgoPlugins: [{ removeViewBox: false }],
             use: [pngquant()]
         })))
+        .pipe(size({
+            title: 'favicon'
+        }))
         .pipe(gulp.dest(options.distFolder + '/favicon'));
 });
 
@@ -145,6 +158,9 @@ gulp.task('sass', function() {
         .pipe(gulpIf(!options.isDev, cssnano())) // сжимаем если на продакшен
         .pipe(gulpIf(options.isDev, sourcemaps.write())) // sourcemap при разработке
         .pipe(gulp.dest(options.distFolder + '/stylesheet')) // выгружаем
+        .pipe(size({
+            title: 'css'
+        }))
         .pipe(browserSync.stream()); // инжектим без перезагрузки
 });
 
@@ -156,6 +172,9 @@ gulp.task('scripts', function() { // берём все файлы скрипто
         .pipe(concat('app.min.js')) // Собираем их в кучу в новом файле
         .pipe(gulpIf(!options.isDev, uglify())) // Сжимаем JS файл если на продакшен
         .pipe(gulpIf(options.isDev, sourcemaps.write())) // sourcemap при разработке
+        .pipe(size({
+            title: 'js'
+        }))
         .pipe(gulp.dest(options.distFolder + '/javascript')); // Выгружаем в папку 
 });
 
@@ -190,5 +209,8 @@ gulp.task('prod', ['clean', 'fonts', 'favicon', 'scripts', 'img', 'sass', 'pug']
 gulp.task('zip', ['prod'], function() {
     gulp.src(options.distFolder + '/**/*')
         .pipe(zip(options.appName + '.zip'))
+        .pipe(size({
+            title: options.appName + '.zip'
+        }))
         .pipe(gulp.dest(''));
 });
