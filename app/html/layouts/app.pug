@@ -8,7 +8,7 @@ html(lang="ru")
 		include ../favicon/favicon.pug
 		//- ###include favicons
 		//- CDN Botstrap css
-		link(rel="stylesheet" crossorigin="anonymous" integrity="sha256-NqI559iHqiWe5VxDi9mXE8i83ghn8Ru8BINyiPN7lDg=" href="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.css")
+		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css")
 		//- ###CDN Botstrap css
 		//- app stylesheet
 		link(rel="stylesheet" href="stylesheet/app.css")
@@ -23,7 +23,6 @@ html(lang="ru")
 		include ../include/footer.pug
 		//- ###footer
 		block scripts
-			//- CDN jQuery 3.2.1
-			script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
 			//- CDN Bootstrap javascripts
-			script(crossorigin="anonymous" integrity="sha256-6ikyM5zgWkLwRwc64Pn/i5ioDIvcxCtb+EXE8Zm0qK8=" src="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.js")
+			script(src="javascript/app.min.js")
+			script(src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/js/foundation.js")
