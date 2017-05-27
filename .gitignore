@@ -3,4 +3,4 @@ bower_components
 public
 npm-debug.log
 yarn.lock
-app.zip
+*.zip
