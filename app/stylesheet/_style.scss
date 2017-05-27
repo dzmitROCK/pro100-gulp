@@ -1,6 +1,5 @@
 body {
     font-family: 'opsans', sans-serif;
-
 }
 
 $aqua: aqua;
@@ -13,7 +12,7 @@ header {
     background-color: $aqua;
     min-height: 100vh;
     img {
-    	width: 100%;
+        width: 100%;
     }
 }
 
@@ -25,4 +24,7 @@ header {
 #footer {
     background-color: darken($aqua, 30%);
     color: #fff;
+}
+.margin {
+    margin: 2rem 0;
 }

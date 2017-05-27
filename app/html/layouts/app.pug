@@ -7,9 +7,6 @@ html(lang="ru")
 		//- include favicons http://realfavicongenerator.net/
 		include ../favicon/favicon.pug
 		//- ###include favicons
-		//- CDN Botstrap css
-		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css")
-		//- ###CDN Botstrap css
 		//- app stylesheet
 		link(rel="stylesheet" href="stylesheet/app.css")
 		//- ###app stylesheet
@@ -23,6 +20,4 @@ html(lang="ru")
 		include ../include/footer.pug
 		//- ###footer
 		block scripts
-			//- CDN Bootstrap javascripts
-			script(src="javascript/app.min.js")
-			script(src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/js/foundation.js")
+			script(src="javascript/app.min.js" async)

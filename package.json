@@ -5,7 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp default",
+    "start": "gulp",
     "production": "gulp prod"
   },
   "repository": {
@@ -37,6 +37,7 @@
     "imagemin-pngquant": "^5.0.0"
   },
   "dependencies": {
+    "foundation-sites": "^6.3.1",
     "jquery": "^3.2.1"
   }
 }

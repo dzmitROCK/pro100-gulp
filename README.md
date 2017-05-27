@@ -7,7 +7,11 @@
 `yarn install`
 ##### Использование
 `yarn start` запуск разработки  
-`yarn run production` конечная компиляция всего проекта 
+`yarn production` компиляция проекта в продакшен  
+### PageSpeed Tools > Insights
+#### Mobile > 85
+#### Desktop > 97
+###### Все настройки в `gulpfile.js`
 ##### Использованы препроцессоры
-* scss и sass
+* scss
 * pug
