@@ -4,6 +4,7 @@ const gulp = require('gulp'), // Сам галп
     sass = require('gulp-sass'), // подключаем компилятор sass || scss
     autoprefixer = require('gulp-autoprefixer'), // пакет для префиксов CSS
     cssnano = require('gulp-cssnano'), // пакет для минификации CSS
+    cleanCSS = require('gulp-clean-css'),
     uglify = require('gulp-uglify'), //  пакет для сжатия JS
     concat = require('gulp-concat'), // для конкатенации файлов
     pug = require('gulp-pug'), // компилятор pug
@@ -18,6 +19,7 @@ const gulp = require('gulp'), // Сам галп
     zip = require('gulp-zip'),
     cache = require('gulp-cache'); // Подключаем библиотеку кеширования
 
+
 // Опции
 const options = {
     appName: 'app',
@@ -28,6 +30,7 @@ const options = {
     distFolder: './public', // папка с выходным проектом
     autoprefixer: 'last 5 versions', // на сколько версий браузеров ставить префиксы 
 }
+
 
 // Пути к файлам
 const path = {
@@ -73,7 +76,6 @@ gulp.task('pug', function buildHTML() {
 // Работа с картинками
 gulp.task('img', function() {
     return gulp.src(path.images) // Берем все изображения
-        //.pipe(newer(options.distFolder + '/images'))
         .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
             interlaced: true,
             progressive: true,
@@ -158,6 +160,7 @@ gulp.task('sass', function() {
         .pipe(gulpIf(!options.isDev, cssnano())) // сжимаем если на продакшен
         .pipe(gulpIf(options.isDev, sourcemaps.write())) // sourcemap при разработке
         .pipe(gulp.dest(options.distFolder + '/stylesheet')) // выгружаем
+        .pipe(gulpIf(!options.isDev, cleanCSS()))
         .pipe(size({
             title: 'css'
         }))
