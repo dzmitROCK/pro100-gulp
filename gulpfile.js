@@ -40,7 +40,7 @@ const path = {
 
 // массив javascript
 var allJavaScripts = [ // подключаем все скрипты проекта здесь. причём в каком порядке подключим в том и собирётся
-    path.node + '/jquery/dist/jquery.min.js', // foundation js
+    path.node + '/jquery/dist/jquery.min.js', // jquery 3.2.1
     path.node + '/foundation-sites/dist/js/foundation.js', // foundation js
     options.devFolder + '/javascript/app.js', // главный файл для работы с js. Желательно подключать последним
 ];
