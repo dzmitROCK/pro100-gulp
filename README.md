@@ -1,4 +1,4 @@
-![](https://github.com/dzmitROCK/start/blob/master/work/favicon/android-chrome-512x512.png?raw=true)
+![](https://github.com/dzmitROCK/start/blob/master/app/favicon/android-chrome-512x512.png?raw=true)
 # Стартовый шаблон для вёрстки *
 > *В разработке...
 #### Документация в разработке
