@@ -10,7 +10,7 @@
 `yarn production` компиляция проекта в продакшен  
 `yarn zip` архивация проекта
 ### PageSpeed Tools > Insights
-#### Mobile > 85
+#### Mobile > 91
 #### Desktop > 97
 ###### Все настройки в `gulpfile.js`
 ##### Использованы препроцессоры

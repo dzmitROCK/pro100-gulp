@@ -25,11 +25,11 @@ const options = {
     appName: 'app',
     isDev: true, // при разработке true, если хотите скомпилировать в продакшен ставим false
     htmlMin: false, // false не сжимем html на выходе, true сжимаем
-    notify: false, // false отключает чудо-надоедливые посказки browser-sync
+    notify: true, // false отключает чудо-надоедливые посказки browser-sync
     devFolder: './app', // рабочая папка
     distFolder: './public', // папка с выходным проектом
     autoprefixer: 'last 5 versions', // на сколько версий браузеров ставить префиксы 
-}
+};
 
 
 // Пути к файлам
@@ -42,7 +42,8 @@ const path = {
     js: options.devFolder + '/javascript/**/*',
     fonts: options.devFolder + '/fonts/**/*',
     favicon: options.devFolder + '/favicon/**/*',
-}
+};
+
 
 // массив javascript
 var allJavaScripts = [ // подключаем все скрипты проекта здесь. причём в каком порядке подключим в том и собирётся
@@ -63,7 +64,8 @@ gulp.task('pug', function buildHTML() {
     return gulp.src(path.pug) // берём все файлы
         .pipe(plumber()) // обрабатываем на ошибки
         .pipe(pug({ // компилим в html
-            pretty: !options.htmlMin
+            pretty: !options.htmlMin,
+            cache: true,
         }))
         .pipe(size({
             title: 'pug'
