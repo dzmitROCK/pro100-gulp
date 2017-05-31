@@ -54,7 +54,7 @@ var allJavaScripts = [ // подключаем все скрипты проек�
 
 
 // del
-gulp.task('clean', function() { // удаляет всю папку public
+gulp.task('clean', function() { // удаляет всю папку генерируемую в продакшен или при разработке
     return del.sync(options.distFolder);
 })
 
@@ -102,14 +102,15 @@ gulp.task('fonts', function() {
 });
 
 
-// При изменении fonts
-gulp.task('fonts-watch', function(done) { // таск выполняется если в папке fonts были изменения
-    del.sync(options.distFolder + '/fonts'); // удаляем
-    gulp.src(path.fonts) // берём всё 
-        .pipe(gulp.dest(options.distFolder + '/fonts')); // переносим в 
-    browserSync.reload(); // перезагружаем страницу
-    done();
-});
+// не работат синхронно почему то. будем разбираться. пусть повисит пока закомментированным
+// // При изменении fonts
+// gulp.task('fonts-watch', function(done) { // таск выполняется если в папке fonts были изменения
+//     del.sync(options.distFolder + '/fonts'); // удаляем
+//     gulp.src(path.fonts) // берём всё 
+//         .pipe(gulp.dest(options.distFolder + '/fonts')); // переносим в 
+//     browserSync.reload(); // перезагружаем страницу
+//     done();
+// });
 
 
 // Копируем favicon
@@ -127,21 +128,21 @@ gulp.task('favicon', function() {
         .pipe(gulp.dest(options.distFolder + '/favicon'));
 });
 
-
-// При изменении favicon
-gulp.task('favicon-watch', function(done) { // таск выполняется если в папке favicon были изменения
-    del.sync([options.distFolder + '/favicon']); // удаляем 
-    gulp.src(path.favicon) // берём всё 
-        .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
-            interlaced: true,
-            progressive: true,
-            svgoPlugins: [{ removeViewBox: false }],
-            use: [pngquant()]
-        })))
-        .pipe(gulp.dest(options.distFolder + '/favicon')); // переносим 
-    browserSync.reload(); // перезагружаем страницу... 
-    done();
-});
+// Тоже с синхронностью надо разобраться
+// // При изменении favicon
+// gulp.task('favicon-watch', function(done) { // таск выполняется если в папке favicon были изменения
+//     del.sync([options.distFolder + '/favicon']); // удаляем 
+//     gulp.src(path.favicon) // берём всё 
+//         .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
+//             interlaced: true,
+//             progressive: true,
+//             svgoPlugins: [{ removeViewBox: false }],
+//             use: [pngquant()]
+//         })))
+//         .pipe(gulp.dest(options.distFolder + '/favicon')); // переносим 
+//     browserSync.reload(); // перезагружаем страницу... 
+//     done();
+// });
 
 
 // Запускаем сервер
@@ -193,7 +194,7 @@ gulp.task('js-watch', ['scripts'], function(done) {
 gulp.task('watch', function() {
     gulp.watch(path.sass, ['sass']); // наблюдаем за файлами и при изменениях выполняем таск
     gulp.watch(path.allPug, ['pug']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.fonts, ['fonts-watch']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(path.fonts, ['fonts']); // наблюдаем за файлами и при изменениях выполняем таск
     gulp.watch(path.images, ['img']); // наблюдаем за файлами и при изменениях выполняем таск
     gulp.watch(path.js, ['js-watch']); // наблюдаем за файлами и при изменениях выполняем таск
 });
@@ -206,7 +207,7 @@ gulp.task('default', ['serve'], function() {
 
 
 // prod task
-gulp.task('prod', ['clean', 'fonts', 'favicon', 'scripts', 'img', 'sass', 'pug'], function() {
+gulp.task('production', ['clean', 'fonts', 'favicon', 'scripts', 'img', 'sass', 'pug'], function() {
     console.log('А я вот день рождения не буду справлять...\nвсё зае....\nэммм...\nВсё скомпилировано, сэр!!!');
 });
 
