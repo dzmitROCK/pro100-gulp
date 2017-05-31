@@ -3,8 +3,9 @@
 > *В разработке...
 #### Документация в разработке
 ##### Установка
-`git clone https://github.com/dzmitROCK/start.git`  
-`yarn install`
+`git clone https://github.com/dzmitROCK/starter-mini-gulp.git`  
+`cd starter-mini-gulp`  
+`yarn install`  
 ##### Использование
 `yarn start` запуск разработки  
 `yarn production` компиляция проекта в продакшен  
