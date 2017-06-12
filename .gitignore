@@ -4,3 +4,4 @@ public
 npm-debug.log
 yarn.lock
 *.zip
+/nbproject/private/

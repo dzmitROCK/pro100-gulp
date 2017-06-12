@@ -2,27 +2,33 @@
 //     font-family: 'Open Sans', sans-serif;
 // }
 
-$aqua: aqua;
+$firstColor: #497495;
 header {
-    background-color: darken($aqua, 30%);
-    color: #fff;
+    background-color: darken($firstColor, 15%);
+    a {
+        color: #fff;
+        &:hover {
+            color: $firstColor;
+        }
+    }
 }
 
 #article {
-    background-color: $aqua;
+    background-color: $firstColor;
     min-height: 100vh;
+    color: #fff;
     img {
         width: 100%;
     }
 }
 
 #sidebar {
-    background-color: darken($aqua, 15%);
+    background-color: darken($firstColor, 15%);
     color: #fff;
 }
 
 #footer {
-    background-color: darken($aqua, 30%);
+    background-color: darken($firstColor, 40%);
     color: #fff;
 }
 .margin {
