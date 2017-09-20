@@ -2,24 +2,29 @@
 const gulp = require('gulp'), // Сам галп
     browserSync = require('browser-sync').create(), // LiveReload перезагрузка страницы при изменениях
     sass = require('gulp-sass'), // подключаем компилятор sass || scss
-    autoprefixer = require('gulp-autoprefixer'), // пакет для префиксов CSS
-    cssnano = require('gulp-cssnano'), // пакет для минификации CSS
-    cleanCSS = require('gulp-clean-css'),
-    uglify = require('gulp-uglify'), //  пакет для сжатия JS
-    concat = require('gulp-concat'), // для конкатенации файлов
-    pug = require('gulp-pug'), // компилятор pug
+    // autoprefixer = require('gulp-autoprefixer'), // пакет для префиксов CSS
+    // cssnano = require('gulp-cssnano'), // пакет для минификации CSS
+    // cleanCSS = require('gulp-clean-css'),
+    // uglify = require('gulp-uglify'), //  пакет для сжатия JS
+    // concat = require('gulp-concat'), // для конкатенации файлов
+    // pug = require('gulp-pug'), // компилятор pug
     del = require('del'), // пакет для удаления папок || файлов
-    plumber = require('gulp-plumber'), // ловит ошибки и показывает их в консоли вместо остановки всего скрипта
-    data = require('gulp-data'), // работаем с json
-    imagemin = require('gulp-imagemin'), // Подключаем библиотеку для работы с изображениями
+    // plumber = require('gulp-plumber'), // ловит ошибки и показывает их в консоли вместо остановки всего скрипта
+    // data = require('gulp-data'), // работаем с json
+    // imagemin = require('gulp-imagemin'), // Подключаем библиотеку для работы с изображениями
     pngquant = require('imagemin-pngquant'), // Подключаем библиотеку для работы с png
-    sourcemaps = require('gulp-sourcemaps'), // генератор sourcemaps
-    gulpIf = require('gulp-if'), // условия в галпе
-    size = require('gulp-size'), // показывает сколько весят файлы
-    zip = require('gulp-zip'), // архивирует проект
-    cache = require('gulp-cache'); // Подключаем библиотеку кеширования
+    // sourcemaps = require('gulp-sourcemaps'), // генератор sourcemaps
+    // gulpIf = require('gulp-if'), // условия в галпе
+    // size = require('gulp-size'), // показывает сколько весят файлы
+    // zip = require('gulp-zip'), // архивирует проект
+    // cache = require('gulp-cache'); // Подключаем библиотеку кеширования
+    gulpLoadPlugins = require('gulp-load-plugins');
 
+var plugins = gulpLoadPlugins();
 
+gulp.task('plug', function () { // удаляет всю папку генерируемую в продакшен или при разработке
+    console.log(plugins);
+});
 // Опции
 const options = {
     appName: 'app', // когда пакуем в zip то будет это название
@@ -62,13 +67,12 @@ gulp.task('clean', function () { // удаляет всю папку генер�
 // Компиляция pug 
 gulp.task('pug', function buildHTML() {
     return gulp.src(PATH.pug) // берём все файлы
-        .pipe(plumber()) // обрабатываем на ошибки
-        .pipe(pug({ // компилим в pug
+        .pipe(plugins.plumber()) // обрабатываем на ошибки
+        .pipe(plugins.pug({ // компилим в pug
             pretty: !options.htmlMin,
             cache: true,
-            data:
         }))
-        .pipe(size({
+        .pipe(plugins.size({
             title: 'pug'
         }))
         .pipe(gulp.dest(options.distFolder))
@@ -83,13 +87,13 @@ gulp.task('php', function () {
 // Работа с картинками
 gulp.task('img', function () {
     return gulp.src(PATH.images) // Берем все изображения
-        .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
+        .pipe(plugins.cache(plugins.imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
             interlaced: true,
             progressive: true,
             svgoPlugins: [{removeViewBox: false}],
             use: [pngquant()]
         })))
-        .pipe(size({
+        .pipe(plugins.size({
             title: 'images'
         }))
         .pipe(gulp.dest(options.distFolder + '/images')) // Выгружаем на продакшен
@@ -100,7 +104,7 @@ gulp.task('img', function () {
 // Копируем fonts
 gulp.task('fonts', function () {
     return gulp.src(PATH.fonts) // берём все в папке fonts
-        .pipe(size({
+        .pipe(plugins.size({
             title: 'fonts'
         }))
         .pipe(gulp.dest(options.distFolder + '/fonts')) // переносим в public
@@ -110,13 +114,13 @@ gulp.task('fonts', function () {
 // Копируем favicon
 gulp.task('favicon', function () {
     return gulp.src(PATH.favicon)
-        .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
+        .pipe(plugins.cache(plugins.imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
             interlaced: true,
             progressive: true,
             svgoPlugins: [{removeViewBox: false}],
             use: [pngquant()]
         })))
-        .pipe(size({
+        .pipe(plugins.size({
             title: 'favicon'
         }))
         .pipe(gulp.dest(options.distFolder + '/favicon'));
@@ -136,14 +140,14 @@ gulp.task('serve', ['clean', 'fonts', 'php', 'scripts', 'favicon', 'img', 'sass'
 // Компилим sass || scss
 gulp.task('sass', function () {
     return gulp.src(PATH.sass) // берём все файлы
-        .pipe(gulpIf(options.isDev, sourcemaps.init())) // sourcemap при разработке
-        .pipe(sass.sync().on('error', sass.logError)) // компилим и ловим ошибки
-        .pipe(autoprefixer([options.autoprefixer], {cascade: true})) // добавляем префиксы
-        .pipe(gulpIf(!options.isDev, cssnano())) // сжимаем если на продакшен
-        .pipe(gulpIf(options.isDev, sourcemaps.write())) // sourcemap при разработке
+        .pipe(plugins.if(options.isDev, plugins.sourcemaps.init())) // sourcemap при разработке
+        .pipe(plugins.sass().on('error', sass.logError)) // компилим и ловим ошибки
+        .pipe(plugins.autoprefixer([options.autoprefixer], {cascade: true})) // добавляем префиксы
+        .pipe(plugins.if(!options.isDev, plugins.cssnano())) // сжимаем если на продакшен
+        .pipe(plugins.if(options.isDev, plugins.sourcemaps.write())) // sourcemap при разработке
         .pipe(gulp.dest(options.distFolder + '/stylesheet')) // выгружаем
-        .pipe(gulpIf(!options.isDev, cleanCSS()))
-        .pipe(size({
+        .pipe(plugins.if(!options.isDev, plugins.cleanCss()))
+        .pipe(plugins.size({
             title: 'css'
         }))
         .pipe(browserSync.stream()); // инжектим без перезагрузки
@@ -153,11 +157,11 @@ gulp.task('sass', function () {
 // javascripts
 gulp.task('scripts', function () { // берём все файлы скриптов
     return gulp.src(allJavaScripts) // 
-        .pipe(gulpIf(options.isDev, sourcemaps.init())) // sourcemap при разработке
-        .pipe(concat('app.min.js')) // Собираем их в кучу в новом файле
-        .pipe(gulpIf(!options.isDev, uglify())) // Сжимаем JS файл если на продакшен
-        .pipe(gulpIf(options.isDev, sourcemaps.write())) // sourcemap при разработке
-        .pipe(size({
+        .pipe(plugins.if(options.isDev, plugins.sourcemaps.init())) // sourcemap при разработке
+        .pipe(plugins.concat('app.min.js')) // Собираем их в кучу в новом файле
+        .pipe(plugins.if(!options.isDev, plugins.uglify())) // Сжимаем JS файл если на продакшен
+        .pipe(plugins.if(options.isDev, plugins.sourcemaps.write())) // sourcemap при разработке
+        .pipe(plugins.size({
             title: 'js'
         }))
         .pipe(gulp.dest(options.distFolder + '/javascript')) // Выгружаем в папку
@@ -188,10 +192,10 @@ gulp.task('production', ['clean', 'fonts', 'favicon', 'scripts', 'img', 'sass', 
 
 
 // Архивирование проекта
-gulp.task('zip', ['prod'], function () {
+gulp.task('zip', ['production'], function () {
     gulp.src(options.distFolder + '/**/*')
-        .pipe(zip(options.appName + '.zip'))
-        .pipe(size({
+        .pipe(plugins.zip(options.appName + '.zip'))
+        .pipe(plugins.size({
             title: options.appName + '.zip'
         }))
         .pipe(gulp.dest(''));
