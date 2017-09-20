@@ -33,7 +33,7 @@ const options = {
 
 
 // Пути к файлам
-const path = {
+const PATH = {
     node: './node_modules',
     pug: options.devFolder + '/pug/*.pug',
     allPug: options.devFolder + '/pug/**/*.pug',
@@ -47,8 +47,8 @@ const path = {
 
 // массив javascript
 var allJavaScripts = [ // подключаем все скрипты проекта здесь. причём в каком порядке подключим в том и собирётся
-    path.node + '/jquery/dist/jquery.min.js', // jquery 3.2.1
-    path.node + '/foundation-sites/dist/js/foundation.js', // foundation js
+    PATH.node + '/jquery/dist/jquery.min.js', // jquery 3.2.1
+    PATH.node + '/foundation-sites/dist/js/foundation.js', // foundation js
     options.devFolder + '/javascript/app.js', // главный файл для работы с js. Желательно подключать последним
 ];
 
@@ -61,11 +61,12 @@ gulp.task('clean', function () { // удаляет всю папку генер�
 
 // Компиляция pug 
 gulp.task('pug', function buildHTML() {
-    return gulp.src(path.pug) // берём все файлы
+    return gulp.src(PATH.pug) // берём все файлы
         .pipe(plumber()) // обрабатываем на ошибки
         .pipe(pug({ // компилим в pug
             pretty: !options.htmlMin,
-            cache: true
+            cache: true,
+            data:
         }))
         .pipe(size({
             title: 'pug'
@@ -81,7 +82,7 @@ gulp.task('php', function () {
 });
 // Работа с картинками
 gulp.task('img', function () {
-    return gulp.src(path.images) // Берем все изображения
+    return gulp.src(PATH.images) // Берем все изображения
         .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
             interlaced: true,
             progressive: true,
@@ -98,7 +99,7 @@ gulp.task('img', function () {
 
 // Копируем fonts
 gulp.task('fonts', function () {
-    return gulp.src(path.fonts) // берём все в папке fonts
+    return gulp.src(PATH.fonts) // берём все в папке fonts
         .pipe(size({
             title: 'fonts'
         }))
@@ -106,21 +107,9 @@ gulp.task('fonts', function () {
         .pipe(browserSync.stream());
 });
 
-
-// не работат синхронно почему то. будем разбираться. пусть повисит пока закомментированным
-// // При изменении fonts
-// gulp.task('fonts-watch', function(done) { // таск выполняется если в папке fonts были изменения
-//     del.sync(options.distFolder + '/fonts'); // удаляем
-//     gulp.src(path.fonts) // берём всё 
-//         .pipe(gulp.dest(options.distFolder + '/fonts')); // переносим в 
-//     browserSync.reload(); // перезагружаем страницу
-//     done();
-// });
-
-
 // Копируем favicon
 gulp.task('favicon', function () {
-    return gulp.src(path.favicon)
+    return gulp.src(PATH.favicon)
         .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
             interlaced: true,
             progressive: true,
@@ -132,22 +121,6 @@ gulp.task('favicon', function () {
         }))
         .pipe(gulp.dest(options.distFolder + '/favicon'));
 });
-
-// Тоже с синхронностью надо разобраться
-// // При изменении favicon
-// gulp.task('favicon-watch', function(done) { // таск выполняется если в папке favicon были изменения
-//     del.sync([options.distFolder + '/favicon']); // удаляем 
-//     gulp.src(path.favicon) // берём всё 
-//         .pipe(cache(imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
-//             interlaced: true,
-//             progressive: true,
-//             svgoPlugins: [{ removeViewBox: false }],
-//             use: [pngquant()]
-//         })))
-//         .pipe(gulp.dest(options.distFolder + '/favicon')); // переносим 
-//     browserSync.reload(); // перезагружаем страницу... 
-//     done();
-// });
 
 
 // Запускаем сервер
@@ -162,7 +135,7 @@ gulp.task('serve', ['clean', 'fonts', 'php', 'scripts', 'favicon', 'img', 'sass'
 
 // Компилим sass || scss
 gulp.task('sass', function () {
-    return gulp.src(path.sass) // берём все файлы
+    return gulp.src(PATH.sass) // берём все файлы
         .pipe(gulpIf(options.isDev, sourcemaps.init())) // sourcemap при разработке
         .pipe(sass.sync().on('error', sass.logError)) // компилим и ловим ошибки
         .pipe(autoprefixer([options.autoprefixer], {cascade: true})) // добавляем префиксы
@@ -193,12 +166,12 @@ gulp.task('scripts', function () { // берём все файлы скрипт�
 
 // смотрим за файлами
 gulp.task('watch', function () {
-    gulp.watch(path.sass, ['sass']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.allPug, ['pug']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.fonts, ['fonts']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.images, ['img']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.js, ['scripts']); // наблюдаем за файлами и при изменениях выполняем таск
-    gulp.watch(path.php, ['php']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(PATH.sass, ['sass']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(PATH.allPug, ['pug']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(PATH.fonts, ['fonts']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(PATH.images, ['img']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(PATH.js, ['scripts']); // наблюдаем за файлами и при изменениях выполняем таск
+    gulp.watch(PATH.php, ['php']); // наблюдаем за файлами и при изменениях выполняем таск
 });
 
 
