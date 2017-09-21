@@ -1,6 +1,7 @@
 ![](https://github.com/dzmitROCK/start/blob/master/app/favicon/android-chrome-512x512.png?raw=true)
 # Стартовый шаблон для вёрстки *
 #### Документация в разработке
+Все настройки в gulpfile.js  
 ##### Установка
 * `git clone https://github.com/dzmitROCK/starter-mini-gulp.git` клонируем репозиторий
 * `cd starter-mini-gulp` переходим в папку проекта
