@@ -37,7 +37,7 @@ const PATHS = {
     node: 'node_modules',
     pug: options.devFolder + '/pug/*.pug',
     allPug: options.devFolder + '/pug/**/*.pug',
-    sass: options.devFolder + '/stylesheet/**/*.scss',
+    sass: options.devFolder + '/stylesheet/**/*.{scss,sass}',
     images: options.devFolder + '/images/**/*.{png,jpg,gif}',
     js: options.devFolder + '/javascript/**/*',
     fonts: options.devFolder + '/fonts/**/*',
@@ -124,11 +124,11 @@ gulp.task('cache', function (done) {
 // Копируем fonts
 gulp.task('fonts', function () {
     return gulp.src(PATHS.fonts) // берём все в папке fonts
+        .pipe($.fontmin())
         .pipe($.size({
             title: 'fonts'
         }))
         .pipe(gulp.dest(options.distFolder + '/fonts')) // переносим в public
-        .pipe(browserSync.stream());
 });
 
 gulp.task('fonts:watch', ['fonts'], function (done) {
@@ -174,6 +174,7 @@ gulp.task('serve', [
         server: options.distFolder,
         notify: options.notify
     });
+
 });
 
 // Компилим sass || scss

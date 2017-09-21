@@ -8,6 +8,7 @@
     "start": "gulp",
     "production": "gulp production --production",
     "zip": "gulp zip --production",
+    "plug": "gulp plug",
     "cacheme": "gulp cache"
   },
   "repository": {
@@ -30,6 +31,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-cssnano": "^2.1.2",
     "gulp-data": "^1.2.1",
+    "gulp-fontmin": "^0.7.4",
     "gulp-if": "^2.0.2",
     "gulp-imagemin": "^3.2.0",
     "gulp-load-plugins": "^1.5.0",

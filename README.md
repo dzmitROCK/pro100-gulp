@@ -9,12 +9,9 @@
 ##### Использование
 `yarn start` запуск разработки  
 `yarn production` компиляция проекта в продакшен   
-`yarn cacheme` очистить кэш       
+`yarn cacheme` очистить кэш  
+`yarn plug` проверить какие плагины в автозагрузке и названия  
 `yarn zip` архивация проекта  
-### PageSpeed Tools > Insights
-#### Mobile > 91
-#### Desktop > 97
-###### Все настройки в `gulpfile.js`
 ##### Использованы препроцессоры
 * scss
 * pug
