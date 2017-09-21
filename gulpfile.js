@@ -3,7 +3,7 @@ var $ = require('gulp-load-plugins')();
 
 const gulp = require('gulp'), // Сам галп
     browserSync = require('browser-sync').create(), // LiveReload перезагрузка страницы при изменениях
-    sass = require('gulp-sass'), // подключаем компилятор sass || scss
+    // sass = require('gulp-sass'), // подключаем компилятор sass || scss
     del = require('del'), // пакет для удаления папок || файлов
     pngquant = require('imagemin-pngquant'); // Подключаем библиотеку для работы с png
 
@@ -19,9 +19,11 @@ const options = {
     notify: true, // false отключает чудо-надоедливые посказки browser-sync
     devFolder: './app', // рабочая папка
     distFolder: './public', // папка с выходным проектом
-    autoprefixer: 'last 5 versions', // на сколько версий браузеров ставить префиксы 
+    autoprefixer: [
+        'last 3 versions',
+        'ie >= 9',
+        'Android >= 2.3'], // на сколько версий браузеров ставить префиксы
 };
-
 
 // Пути к файлам
 const PATH = {
@@ -29,12 +31,11 @@ const PATH = {
     pug: options.devFolder + '/pug/*.pug',
     allPug: options.devFolder + '/pug/**/*.pug',
     sass: options.devFolder + '/stylesheet/**/*.scss',
-    images: options.devFolder + '/images/**/*',
+    images: options.devFolder + '/images/**/*.{png,jpg,gif}',
     js: options.devFolder + '/javascript/**/*',
     fonts: options.devFolder + '/fonts/**/*',
     favicon: options.devFolder + '/favicon/**/*',
 };
-
 
 // массив javascript
 var allJavaScripts = [ // подключаем все скрипты проекта здесь. причём в каком порядке подключим в том и собирётся
@@ -53,11 +54,13 @@ gulp.task('clean', function () { // удаляет всю папку генер�
 // Компиляция pug 
 gulp.task('pug', function buildHTML() {
     return gulp.src(PATH.pug) // берём все файлы
-        .pipe($.plumber()) // обрабатываем на ошибки
         .pipe($.pug({ // компилим в pug
             pretty: !options.htmlMin,
-            cache: true,
-        }))
+            cache: true
+        }).on('error', $.notify.onError({
+            message: "<%= error.message %>",
+            title: "Pug Error"
+        })))
         .pipe($.size({
             title: 'pug'
         }))
@@ -127,8 +130,12 @@ gulp.task('serve', ['clean', 'fonts', 'php', 'scripts', 'favicon', 'img', 'sass'
 gulp.task('sass', function () {
     return gulp.src(PATH.sass) // берём все файлы
         .pipe($.if(options.isDev, $.sourcemaps.init())) // sourcemap при разработке
-        .pipe($.sass().on('error', sass.logError)) // компилим и ловим ошибки
-        .pipe($.autoprefixer([options.autoprefixer], {cascade: true})) // добавляем префиксы
+        .pipe($.sass()
+            .on('error', $.notify.onError({
+                message: "<%= error.message %>",
+                title: "Sass Error"
+            })))
+        .pipe($.autoprefixer({browsers: options.autoprefixer, cascade: true})) // добавляем префиксы
         .pipe($.if(!options.isDev, $.cssnano())) // сжимаем если на продакшен
         .pipe($.if(options.isDev, $.sourcemaps.write())) // sourcemap при разработке
         .pipe(gulp.dest(options.distFolder + '/stylesheet')) // выгружаем
