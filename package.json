@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "gulp",
-    "production": "gulp production",
-    "zip": "gulp zip"
+    "production": "gulp production --production",
+    "zip": "gulp zip --production",
+    "cacheme": "gulp cache"
   },
   "repository": {
     "type": "git",
@@ -39,7 +40,9 @@
     "gulp-sourcemaps": "^2.6.0",
     "gulp-uglify": "^2.1.2",
     "gulp-zip": "^4.0.0",
-    "imagemin-pngquant": "^5.0.0"
+    "imagemin-jpeg-recompress": "^5.1.0",
+    "imagemin-pngquant": "^5.0.0",
+    "yargs": "^9.0.1"
   },
   "dependencies": {
     "foundation-sites": "^6.3.1",

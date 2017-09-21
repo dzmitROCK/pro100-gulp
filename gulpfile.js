@@ -5,21 +5,26 @@ const gulp = require('gulp'), // Сам галп
     browserSync = require('browser-sync').create(), // LiveReload перезагрузка страницы при изменениях
     del = require('del'), // пакет для удаления папок || файлов
     // path = require('path'), // скоро понадобится
+    imageminJpegRecompress = require('imagemin-jpeg-recompress'),
     fs = require('fs'),
-    pngquant = require('imagemin-pngquant'); // Подключаем библиотеку для работы с png
+    pngquant = require('imagemin-pngquant'),
+    argv = require('yargs').argv; // Подключаем библиотеку для работы с png
 
+// включаем флаги команд
+var isProduction = !!(argv.production);
 
 gulp.task('plug', function () { // посмотрим какие плагины подключились и какие названия
     console.log($);
 });
+
 // Опции
 const options = {
     appName: 'app', // когда пакуем в zip то будет это название
-    isDev: true, // при разработке true, если хотите скомпилировать в продакшен ставим false
+    imgQuality: 'low', // качество картинок на выходе low, medium, high and veryhigh
     htmlMin: false, // false не сжимем pug на выходе, true сжимаем
     notify: false, // false отключает чудо-надоедливые посказки browser-sync
-    devFolder: './app', // рабочая папка
-    distFolder: './public', // папка с выходным проектом
+    devFolder: 'app', // рабочая папка
+    distFolder: 'public', // папка с выходным проектом
     autoprefixer: [
         'last 3 versions',
         'ie >= 9',
@@ -29,7 +34,7 @@ const options = {
 
 // Пути к файлам
 const PATHS = {
-    node: './node_modules',
+    node: 'node_modules',
     pug: options.devFolder + '/pug/*.pug',
     allPug: options.devFolder + '/pug/**/*.pug',
     sass: options.devFolder + '/stylesheet/**/*.scss',
@@ -57,7 +62,7 @@ gulp.task('clean', function () { // удаляет всю папку генер�
 // Компиляция pug 
 gulp.task('pug', function () {
     return gulp.src(PATHS.pug) // берём все файлы
-        .pipe($.data(function(file) {
+        .pipe($.data(function (file) {
             return JSON.parse(fs.readFileSync(PATHS.jsonPug));
         }))
         .pipe($.pug({ // компилим в pug
@@ -86,11 +91,20 @@ gulp.task('php', function () {
 // Работа с картинками
 gulp.task('img', function () {
     return gulp.src(PATHS.images) // Берем все изображения
-        .pipe($.cache($.imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
-            interlaced: true,
-            progressive: true,
-            svgoPlugins: [{removeViewBox: false}],
-            use: [pngquant()]
+        .pipe($.cache($.imagemin([
+            $.imagemin.gifsicle({interlaced: true}),
+            $.imagemin.jpegtran({progressive: true}),
+            imageminJpegRecompress({
+                loops: 5,
+                min: 65,
+                max: 70,
+                quality: options.imgQuality
+            }),
+            $.imagemin.svgo(),
+            $.imagemin.optipng({optimizationLevel: 3}),
+            pngquant({quality: '65-70', speed: 5})
+        ], {
+            verbose: true
         })))
         .pipe($.size({
             title: 'images'
@@ -100,6 +114,11 @@ gulp.task('img', function () {
 gulp.task('img:watch', ['img'], function (done) {
     browserSync.reload();
     done();
+});
+
+// Чистка кэша
+gulp.task('cache', function (done) {
+    return $.cache.clearAll(done);
 });
 
 // Копируем fonts
@@ -119,15 +138,21 @@ gulp.task('fonts:watch', ['fonts'], function (done) {
 // Копируем favicon
 gulp.task('favicon', function () {
     return gulp.src(PATHS.favicon)
-        .pipe($.cache($.imagemin({ // Сжимаем их с наилучшими настройками с учетом кеширования
-            interlaced: true,
-            progressive: true,
-            svgoPlugins: [{removeViewBox: false}],
-            use: [pngquant()]
+        .pipe($.cache($.imagemin([
+            $.imagemin.gifsicle({interlaced: true}),
+            $.imagemin.jpegtran({progressive: true}),
+            imageminJpegRecompress({
+                loops: 5,
+                min: 65,
+                max: 70,
+                quality: options.imgQuality
+            }),
+            $.imagemin.svgo(),
+            $.imagemin.optipng({optimizationLevel: 3}),
+            pngquant({quality: '65-70', speed: 5})
+        ], {
+            verbose: true
         })))
-        .pipe($.size({
-            title: 'favicon'
-        }))
         .pipe(gulp.dest(options.distFolder + '/favicon'));
 });
 
@@ -154,20 +179,20 @@ gulp.task('serve', [
 // Компилим sass || scss
 gulp.task('sass', function () {
     return gulp.src(PATHS.sass) // берём все файлы
-        .pipe($.if(options.isDev, $.sourcemaps.init())) // sourcemap при разработке
+        .pipe($.if(!isProduction, $.sourcemaps.init())) // sourcemap при разработке
         .pipe($.sass()
             .on('error', $.notify.onError({
                 message: "<%= error.message %>",
                 title: "Sass Error"
             })))
         .pipe($.autoprefixer({browsers: options.autoprefixer, cascade: true})) // добавляем префиксы
-        .pipe($.if(!options.isDev, $.cssnano())) // сжимаем если на продакшен
-        .pipe($.if(options.isDev, $.sourcemaps.write())) // sourcemap при разработке
-        .pipe(gulp.dest(options.distFolder + '/stylesheet')) // выгружаем
-        .pipe($.if(!options.isDev, $.cleanCss()))
+        .pipe($.if(isProduction, $.cleanCss())) // подчищаем css от неиспользуемых класов и тд
+        .pipe($.if(isProduction, $.cssnano())) // сжимаем если на продакшен
+        .pipe($.if(!isProduction, $.sourcemaps.write())) // sourcemap при разработке
         .pipe($.size({
             title: 'css'
         }))
+        .pipe(gulp.dest(options.distFolder + '/stylesheet')) // выгружаем
         .pipe(browserSync.stream()); // инжектим без перезагрузки
 });
 
@@ -175,10 +200,10 @@ gulp.task('sass', function () {
 // javascripts
 gulp.task('scripts', function () { // берём все файлы скриптов
     return gulp.src(allJavaScripts) // 
-        .pipe($.if(options.isDev, $.sourcemaps.init())) // sourcemap при разработке
+        .pipe($.if(!isProduction, $.sourcemaps.init())) // sourcemap при разработке
         .pipe($.concat('app.min.js')) // Собираем их в кучу в новом файле
-        .pipe($.if(!options.isDev, $.uglify())) // Сжимаем JS файл если на продакшен
-        .pipe($.if(options.isDev, $.sourcemaps.write())) // sourcemap при разработке
+        .pipe($.if(isProduction, $.uglify())) // Сжимаем JS файл если на продакшен
+        .pipe($.if(!isProduction, $.sourcemaps.write())) // sourcemap при разработке
         .pipe($.size({
             title: 'js'
         }))

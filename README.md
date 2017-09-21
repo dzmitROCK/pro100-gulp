@@ -8,8 +8,9 @@
 * `yarn` устанавливаем все зависимости и пакеты 
 ##### Использование
 `yarn start` запуск разработки  
-`yarn production` компиляция проекта в продакшен  
-`yarn zip` архивация проекта
+`yarn production` компиляция проекта в продакшен   
+`yarn cacheme` очистить кэш       
+`yarn zip` архивация проекта  
 ### PageSpeed Tools > Insights
 #### Mobile > 91
 #### Desktop > 97
