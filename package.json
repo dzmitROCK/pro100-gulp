@@ -34,6 +34,7 @@
     "gulp-fontmin": "^0.7.4",
     "gulp-if": "^2.0.2",
     "gulp-imagemin": "^3.2.0",
+    "gulp-jshint": "^2.0.4",
     "gulp-load-plugins": "^1.5.0",
     "gulp-notify": "^3.0.0",
     "gulp-pug": "^3.3.0",
@@ -44,6 +45,7 @@
     "gulp-zip": "^4.0.0",
     "imagemin-jpeg-recompress": "^5.1.0",
     "imagemin-pngquant": "^5.0.0",
+    "jshint": "^2.9.5",
     "yargs": "^9.0.1"
   },
   "dependencies": {

@@ -213,9 +213,25 @@ gulp.task('sass', function () {
         .pipe(browserSync.stream()); // инжектим без перезагрузки
 });
 
+gulp.task('lint', function () {
+    return gulp.src('app/javascript/**/*.js')
+        .pipe($.jshint())
+        .pipe($.notify(function (file) {
+            if (file.jshint.success) {
+                return false;
+            }
+
+            var errors = file.jshint.results.map(function (data) {
+                if (data.error) {
+                    return "(" + data.error.line + ':' + data.error.character + ') ' + data.error.reason;
+                }
+            }).join("\n");
+            return file.relative + " (" + file.jshint.results.length + " errors)\n" + errors;
+        }));
+})
 
 // javascripts
-gulp.task('scripts', function () { // берём все файлы скриптов
+gulp.task('scripts', ['lint'], function () { // берём все файлы скриптов
     return gulp.src(allJavaScripts) //
         .pipe($.if(!isProduction, $.sourcemaps.init())) // sourcemap при разработке
         .pipe($.concat('app.min.js')) // Собираем их в кучу в новом файле
