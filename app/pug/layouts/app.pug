@@ -10,14 +10,16 @@ html(lang="ru")
 		//- app stylesheet
 		link(rel="stylesheet" href="stylesheet/app.css")
 		//- ###app stylesheet
+		//- cdn jquery
+		script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
+		//- ###cdn jquery
 		block title
 	body
-		//- header
-		include ../include/header.pug
-		//- ###header
-		block content
-		//- footer
-		include ../include/footer.pug
-		//- ###footer
-		block scripts
-			script(src="javascript/app.min.js" async)
+		#offCanvas.off-canvas.position-left(data-off-canvas)
+			include ../include/mobile-menu.pug
+		.off-canvas-content(data-off-canvas-content)
+			include ../include/header.pug
+			block content
+			include ../include/footer.pug
+			block scripts
+				script(src="javascript/app.min.js" async)

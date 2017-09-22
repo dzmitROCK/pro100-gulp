@@ -48,8 +48,7 @@ const PATHS = {
 
 // массив javascript
 var allJavaScripts = [ // подключаем все скрипты проекта здесь. причём в каком порядке подключим в том и собирётся
-    PATHS.node + '/jquery/dist/jquery.min.js', // jquery 3.2.1
-    PATHS.node + '/foundation-sites/dist/js/foundation.js', // foundation js
+    PATHS.node + '/foundation-sites/dist/js/foundation.min.js', // foundation js
     options.devFolder + '/javascript/app.js', // главный файл для работы с js. Желательно подключать последним
 ];
 

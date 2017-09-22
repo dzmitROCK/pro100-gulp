@@ -1,5 +1,26 @@
-header
-	.row
-		.column.small-12
-			h1
-				a(href="/") Шапочка
+.title-bar(data-responsive-toggle='responsive-menu', data-hide-for='medium')
+    button.menu-icon(type='button', data-toggle='offCanvas')
+    .title-bar-title Menu
+#responsive-menu.top-bar
+    .top-bar-left
+        ul.dropdown.menu(data-dropdown-menu='')
+            li.menu-text #{name}
+            li.has-submenu
+                a(href='#0') One
+                ul.submenu.menu.vertical(data-submenu='')
+                    li
+                        a(href='#0') One
+                    li
+                        a(href='#0') Two
+                    li
+                        a(href='#0') Three
+            li
+                a(href='#0') Two
+            li
+                a(href='#0') Three
+    .top-bar-right
+        ul.menu
+            li
+                input(type='search', placeholder='Search')
+            li
+                button.button(type='button') Search
