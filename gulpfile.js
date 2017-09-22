@@ -216,7 +216,7 @@ gulp.task('sass', function () {
 
 // javascripts
 gulp.task('scripts', function () { // берём все файлы скриптов
-    return gulp.src(allJavaScripts) // 
+    return gulp.src(allJavaScripts) //
         .pipe($.if(!isProduction, $.sourcemaps.init())) // sourcemap при разработке
         .pipe($.concat('app.min.js')) // Собираем их в кучу в новом файле
         .pipe($.if(isProduction, $.uglify())) // Сжимаем JS файл если на продакшен
@@ -270,5 +270,6 @@ gulp.task('zip', ['production'], function () {
         .pipe($.size({
             title: options.appName + '.zip'
         }))
-        .pipe(gulp.dest(''));
+        .pipe(gulp.dest(''))
+        .pipe($.notify('Создан архив  ' + options.appName + '.zip'))
 });
