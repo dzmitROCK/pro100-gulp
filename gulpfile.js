@@ -43,6 +43,7 @@ const PATHS = {
     fonts: options.devFolder + '/fonts/**/*',
     favicon: options.devFolder + '/favicon/**/*',
     jsonPug: options.devFolder + '/pug/json/pug-variables.json',
+    tmpFonts: options.devFolder + '/tmp/*.css'
 };
 
 // массив javascript
@@ -55,7 +56,7 @@ var allJavaScripts = [ // подключаем все скрипты проек�
 
 // del
 gulp.task('clean', function () { // удаляет всю папку генерируемую в продакшен или при разработке
-    return del.sync(options.distFolder);
+    return del.sync([options.distFolder, options.devFolder + '/tmp']);
 });
 
 
@@ -121,10 +122,25 @@ gulp.task('cache', function (done) {
     return $.cache.clearAll(done);
 });
 
+gulp.task('fonts-style', ['generate-fonts'], function () {
+    return gulp.src(PATHS.tmpFonts)
+        .pipe($.concat('_fonts.scss'))
+        .pipe(gulp.dest(options.devFolder + '/stylesheet'))
+});
+
+gulp.task('generate-fonts', function () {
+    return gulp.src(PATHS.fonts) // берём все шрифты в папке fonts
+        .pipe($.fontmin({ // генерируем шрифты
+            fontPath: '../fonts/', // добавляем в путь
+            asFileName: true,
+        }))
+        .pipe(gulp.dest(options.devFolder + '/tmp')) // переносим в tmp
+});
+
+
 // Копируем fonts
-gulp.task('fonts', function () {
-    return gulp.src(PATHS.fonts) // берём все в папке fonts
-        .pipe($.fontmin())
+gulp.task('fonts', ['fonts-style'], function () {
+    return gulp.src(options.devFolder + '/tmp/*.{eot,svg,ttf,woff}') // берём все шрифты в папке tmp
         .pipe($.size({
             title: 'fonts'
         }))

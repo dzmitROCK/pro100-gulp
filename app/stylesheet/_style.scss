@@ -1,7 +1,9 @@
-$body-font-family: 'Open Sans', "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+@import "fonts";
+$body-font-family: 'open-sans', "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
 
 body {
   font-family: $body-font-family;
+
 }
 
 $firstColor: gray;
