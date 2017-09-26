@@ -131,7 +131,7 @@ gulp.task('generate-fonts', function () {
     return gulp.src(PATHS.fonts) // берём все шрифты в папке fonts
         .pipe($.fontmin({ // генерируем шрифты
             fontPath: '../fonts/', // добавляем в путь
-            asFileName: true,
+            asFileName: true, // по названию файла шрифта генерируется название font-family
         }))
         .pipe(gulp.dest(options.devFolder + '/tmp')) // переносим в tmp
 });
@@ -152,7 +152,7 @@ gulp.task('fonts:watch', ['fonts'], function (done) {
 });
 // Копируем favicon
 gulp.task('favicon', function () {
-    return gulp.src(PATHS.favicon)
+    return gulp.src(['!app/favicon/readme.md', PATHS.favicon ])
         .pipe($.cache($.imagemin([
             $.imagemin.gifsicle({interlaced: true}),
             $.imagemin.jpegtran({progressive: true}),
