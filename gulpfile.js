@@ -273,9 +273,7 @@ gulp.task('production', [
     'img',
     'sass',
     'pug'
-], function () {
-    console.log('А я вот день рождения не буду справлять...\nвсё зае....\nэммм...\nВсё скомпилировано, сэр!!!');
-});
+]);
 
 
 // Архивирование проекта
@@ -286,5 +284,5 @@ gulp.task('zip', ['production'], function () {
             title: options.appName + '.zip'
         }))
         .pipe(gulp.dest(''))
-        .pipe($.notify('Создан архив  ' + options.appName + '.zip'))
+        .pipe($.notify('Создан архив ' + options.appName + '.zip'))
 });
