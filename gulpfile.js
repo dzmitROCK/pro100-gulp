@@ -92,8 +92,12 @@ gulp.task('php', function () {
 gulp.task('img', function () {
     return gulp.src(PATHS.images) // Берем все изображения
         .pipe($.cache($.imagemin([
-            $.imagemin.gifsicle({interlaced: true}),
-            $.imagemin.jpegtran({progressive: true}),
+            $.imagemin.gifsicle({
+                interlaced: true
+            }),
+            $.imagemin.jpegtran({
+                progressive: true
+            }),
             imageminJpegRecompress({
                 loops: 5,
                 min: 65,
@@ -101,8 +105,13 @@ gulp.task('img', function () {
                 quality: options.imgQuality
             }),
             $.imagemin.svgo(),
-            $.imagemin.optipng({optimizationLevel: 3}),
-            pngquant({quality: '65-70', speed: 5})
+            $.imagemin.optipng({
+                optimizationLevel: 3
+            }),
+            pngquant({
+                quality: '65-70',
+                speed: 5
+            })
         ], {
             verbose: true
         })))
@@ -152,10 +161,14 @@ gulp.task('fonts:watch', ['fonts'], function (done) {
 });
 // Копируем favicon
 gulp.task('favicon', function () {
-    return gulp.src(['!app/favicon/readme.md', PATHS.favicon ])
+    return gulp.src(['!app/favicon/readme.md', PATHS.favicon])
         .pipe($.cache($.imagemin([
-            $.imagemin.gifsicle({interlaced: true}),
-            $.imagemin.jpegtran({progressive: true}),
+            $.imagemin.gifsicle({
+                interlaced: true
+            }),
+            $.imagemin.jpegtran({
+                progressive: true
+            }),
             imageminJpegRecompress({
                 loops: 5,
                 min: 65,
@@ -163,8 +176,13 @@ gulp.task('favicon', function () {
                 quality: options.imgQuality
             }),
             $.imagemin.svgo(),
-            $.imagemin.optipng({optimizationLevel: 3}),
-            pngquant({quality: '65-70', speed: 5})
+            $.imagemin.optipng({
+                optimizationLevel: 3
+            }),
+            pngquant({
+                quality: '65-70',
+                speed: 5
+            })
         ], {
             verbose: true
         })))
@@ -201,7 +219,10 @@ gulp.task('sass', function () {
                 message: "<%= error.message %>",
                 title: "Sass Error"
             })))
-        .pipe($.autoprefixer({browsers: options.autoprefixer, cascade: true})) // добавляем префиксы
+        .pipe($.autoprefixer({
+            browsers: options.autoprefixer,
+            cascade: true
+        })) // добавляем префиксы
         .pipe($.if(isProduction, $.cleanCss())) // подчищаем css от неиспользуемых класов и тд
         .pipe($.if(isProduction, $.cssnano())) // сжимаем если на продакшен
         .pipe($.if(!isProduction, $.sourcemaps.write())) // sourcemap при разработке
@@ -259,13 +280,14 @@ gulp.task('watch', function () {
 
 
 // defaul task
-gulp.task('default', ['serve'], function () {
+gulp.task('default', ['cache', 'serve'], function () {
     console.log('Поехали!!!');
 });
 
 
 // prod task
 gulp.task('production', [
+    'cache',
     'clean',
     'fonts',
     'favicon',
