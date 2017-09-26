@@ -8,6 +8,7 @@ const gulp = require('gulp'), // Сам галп
     imageminJpegRecompress = require('imagemin-jpeg-recompress'),
     fs = require('fs'),
     pngquant = require('imagemin-pngquant'),
+    colors = require('colors'),
     argv = require('yargs').argv; // Подключаем библиотеку для работы с png
 
 // включаем флаги команд
@@ -281,7 +282,7 @@ gulp.task('watch', function () {
 
 // defaul task
 gulp.task('default', ['cache', 'serve'], function () {
-    console.log('Поехали!!!');
+    console.log('Поехали!!!'.red);
 });
 
 
@@ -306,5 +307,7 @@ gulp.task('zip', ['production'], function () {
             title: options.appName + '.zip'
         }))
         .pipe(gulp.dest(''))
-        .pipe($.notify('Создан архив ' + options.appName + '.zip'))
+        .pipe($.notify({
+            message: 'Создан архив ' + options.appName + '.zip',
+        }));
 });
