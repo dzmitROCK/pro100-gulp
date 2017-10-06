@@ -62,7 +62,7 @@ gulp.task('clean', () => { // удаляет всю папку генериру�
 // Компиляция pug 
 gulp.task('pug', () => { // если надо конвертнуть html в pug http://html2jade.org/ и http://html2pug.herokuapp.com/
     return gulp.src(PATHS.pug) // берём все файлы
-        .pipe($.cached('pug'))
+        // .pipe($.cached('pug'))
         .pipe($.data(function(file) {
             return JSON.parse(fs.readFileSync(PATHS.jsonPug)); // берём json
         }))
