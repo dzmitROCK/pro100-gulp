@@ -23,13 +23,15 @@ const options = {
     imgQuality: 'medium', // качество картинок на выходе low, medium, high and veryhigh
     htmlMin: false, // false не сжимем pug на выходе, true сжимаем
     notify: false, // false отключает чудо-надоедливые посказки browser-sync
-    devFolder: 'app', // рабочая папка
+    devFolder: 'app', // рабочая папка(если переименовываем папку разработки то и здесь меняем)
     distFolder: 'public', // папка с выходным проектом
     autoprefixer: [
         'last 3 versions',
         'ie >= 9',
         'Android >= 2.3'
     ], // на сколько версий браузеров ставить префиксы
+    dataName: 'data.json',
+    tmpFolder: '/tmp/'
 };
 
 // Пути к файлам
@@ -43,7 +45,8 @@ const PATHS = {
     fonts: options.devFolder + '/fonts/**/*',
     favicon: options.devFolder + '/favicon/**/*',
     jsonPug: options.devFolder + '/pug/json/**/*.json',
-    tmpFonts: options.devFolder + '/tmp/*.css',
+    tmpFontsCss: options.devFolder + options.tmpFolder + '*.css',
+    tmpData: options.devFolder + options.tmpFolder + options.dataName
 };
 
 // массив javascript
@@ -55,7 +58,7 @@ let allJavaScripts = [ // подключаем все скрипты проек�
 
 // del
 gulp.task('clean', () => { // удаляет всю папку генерируемую в продакшен или при разработке
-    return del.sync([options.distFolder, options.devFolder + '/tmp']);
+    return del.sync([options.distFolder, options.devFolder + options.tmpFolder]);
 });
 
 
@@ -63,7 +66,7 @@ gulp.task('clean', () => { // удаляет всю папку генериру�
 gulp.task('pug',['pug:data'], () => { // если надо конвертнуть html в pug http://html2jade.org/ и http://html2pug.herokuapp.com/
     return gulp.src(PATHS.pug) // берём все файлы
         .pipe($.data(function(file) {
-            return JSON.parse(fs.readFileSync('app/tmp/data.json')); // берём json
+            return JSON.parse(fs.readFileSync(PATHS.tmpData)); // берём json
         }))
         .pipe($.pug({ // компилим в pug
             pretty: !options.htmlMin,
@@ -89,13 +92,13 @@ gulp.task('pug:data', function() {
     return gulp.src(PATHS.jsonPug)
         .pipe($.plumber())
         .pipe($.mergeJson({
-            fileName: 'data.json'
+            fileName: options.dataName
         }))
         .on('error', $.notify.onError({
             message: "<%= error.message %>",
             title: "JSON Error"
         }))
-        .pipe(gulp.dest(options.devFolder + '/tmp'));
+        .pipe(gulp.dest(options.devFolder + options.tmpFolder));
 });
 
 
@@ -136,6 +139,8 @@ gulp.task('img', () => {
         }))
         .pipe(gulp.dest(options.distFolder + '/images')) // Выгружаем на продакшен
 });
+
+
 gulp.task('img:watch', ['img'], (done) => {
     browserSync.reload();
     done();
@@ -148,7 +153,7 @@ gulp.task('cache', (done) => {
 });
 
 gulp.task('fonts-style', ['generate-fonts'], () => {
-    return gulp.src(PATHS.tmpFonts)
+    return gulp.src(PATHS.tmpFontsCss)
         .pipe($.concat('_fonts.scss'))
         .pipe(gulp.dest(options.devFolder + '/stylesheet'))
 });
@@ -159,13 +164,13 @@ gulp.task('generate-fonts', () => {
             fontPath: '../fonts/', // добавляем в путь
             asFileName: true, // по названию файла шрифта генерируется название font-family
         }))
-        .pipe(gulp.dest(options.devFolder + '/tmp')) // переносим в tmp
+        .pipe(gulp.dest(options.devFolder + options.tmpFolder)) // переносим в tmp
 });
 
 
 // Копируем fonts
 gulp.task('fonts', ['fonts-style'], () => {
-    return gulp.src(options.devFolder + '/tmp/*.{eot,svg,ttf,woff}') // берём все шрифты в папке tmp
+    return gulp.src(options.devFolder + options.tmpFolder + '*.{eot,svg,ttf,woff}') // берём все шрифты в папке tmp
         .pipe($.size({
             title: 'fonts'
         }))
@@ -176,6 +181,8 @@ gulp.task('fonts:watch', ['fonts'], function(done) {
     browserSync.reload();
     done();
 });
+
+
 // Копируем favicon
 gulp.task('favicon', () => {
     return gulp.src(['!app/favicon/readme.md', PATHS.favicon])
