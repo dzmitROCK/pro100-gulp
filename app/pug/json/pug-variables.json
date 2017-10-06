@@ -1,6 +1,4 @@
 {
   "hello": "Привет",
-  "name":"starter-mini-gulp",
-  "foundationSites": "^6.4.3",
-  "jquery": "^3.2.1"
+  "name":"starter-mini-gulp"
 }

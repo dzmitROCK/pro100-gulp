@@ -4,7 +4,7 @@ const $ = require('gulp-load-plugins')(); // автозагрузка плаги
 const gulp = require('gulp'), // Сам галп
     browserSync = require('browser-sync').create(), // LiveReload перезагрузка страницы при изменениях
     del = require('del'), // пакет для удаления папок || файлов
-    // path = require('path'), // скоро понадобится
+    path = require('path'), // скоро понадобится
     imageminJpegRecompress = require('imagemin-jpeg-recompress'),
     fs = require('fs'),
     pngquant = require('imagemin-pngquant'),
@@ -42,8 +42,8 @@ const PATHS = {
     js: options.devFolder + '/javascript/**/*',
     fonts: options.devFolder + '/fonts/**/*',
     favicon: options.devFolder + '/favicon/**/*',
-    jsonPug: options.devFolder + '/pug/json/pug-variables.json',
-    tmpFonts: options.devFolder + '/tmp/*.css'
+    jsonPug: options.devFolder + '/pug/json/**/*.json',
+    tmpFonts: options.devFolder + '/tmp/*.css',
 };
 
 // массив javascript
@@ -60,14 +60,10 @@ gulp.task('clean', () => { // удаляет всю папку генериру�
 
 
 // Компиляция pug 
-gulp.task('pug', () => { // если надо конвертнуть html в pug http://html2jade.org/ и http://html2pug.herokuapp.com/
+gulp.task('pug',['pug:data'], () => { // если надо конвертнуть html в pug http://html2jade.org/ и http://html2pug.herokuapp.com/
     return gulp.src(PATHS.pug) // берём все файлы
         .pipe($.data(function(file) {
-            return JSON.parse(fs.readFileSync(PATHS.jsonPug)); // берём json
-        }))
-        .on('error', $.notify.onError({
-            message: "<%= error.message %>",
-            title: "JSON Error"
+            return JSON.parse(fs.readFileSync('app/tmp/data.json')); // берём json
         }))
         .pipe($.pug({ // компилим в pug
             pretty: !options.htmlMin,
@@ -86,6 +82,22 @@ gulp.task('pug:watch', ['pug'], (done) => {
     browserSync.reload();
     done();
 });
+
+
+// data json 
+gulp.task('pug:data', function() {
+    return gulp.src(PATHS.jsonPug)
+        .pipe($.plumber())
+        .pipe($.mergeJson({
+            fileName: 'data.json'
+        }))
+        .on('error', $.notify.onError({
+            message: "<%= error.message %>",
+            title: "JSON Error"
+        }))
+        .pipe(gulp.dest(options.devFolder + '/tmp'));
+});
+
 
 // Копируем php
 gulp.task('php', () => {
