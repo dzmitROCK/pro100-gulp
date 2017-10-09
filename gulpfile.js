@@ -11,12 +11,11 @@ const gulp = require('gulp'), // Сам галп
     argv = require('yargs').argv; // Подключаем библиотеку для работы с png
 
 // включаем флаги команд
-let isProduction = !!(argv.production);
+const isProduction = !!(argv.production);
 
 gulp.task('plug', function () { // посмотрим какие плагины подключились и какие названия
     console.log($);
-})
-;
+});
 
 // Опции
 const options = {
@@ -24,8 +23,8 @@ const options = {
     imgQuality: 'medium', // качество картинок на выходе low, medium, high and veryhigh
     htmlMin: false, // false не сжимем pug на выходе, true сжимаем
     notify: false, // false отключает чудо-надоедливые посказки browser-sync
-    devFolder: 'app', // рабочая папка(если переименовываем папку разработки то и здесь меняем)
-    distFolder: 'public', // папка с выходным проектом
+    srcFolder: 'app', // рабочая папка(если переименовываем папку разработки то и здесь меняем)
+    publicFolder: 'public', // папка с выходным проектом
     autoprefixer: [
         'last 3 versions',
         'ie >= 9',
@@ -37,36 +36,36 @@ const options = {
 
 // Пути к файлам
 const PATHS = {
-    node: 'node_modules',
-    pug: options.devFolder + '/pug/*.pug',
-    allPug: options.devFolder + '/pug/**/*.pug',
-    sass: options.devFolder + '/stylesheet/**/*.{scss,sass}',
-    images: options.devFolder + '/images/**/*.{png,jpg,gif}',
-    js: options.devFolder + '/javascript/**/*',
-    fonts: options.devFolder + '/fonts/**/*',
-    favicon: options.devFolder + '/favicon/**/*',
-    jsonPug: options.devFolder + '/pug/json/**/*.json',
-    tmpFontsCss: options.devFolder + options.tmpFolder + '*.css',
-    tmpData: options.devFolder + options.tmpFolder + options.dataName
+    nodeFolder: 'node_modules',
+    pugPages: options.srcFolder + '/pug/*.pug',
+    allPug: options.srcFolder + '/pug/**/*.pug',
+    sass: options.srcFolder + '/stylesheet/**/*.{scss,sass}',
+    images: options.srcFolder + '/images/**/*.{png,jpg,gif}',
+    js: options.srcFolder + '/javascript/**/*',
+    fonts: options.srcFolder + '/fonts/**/*',
+    favicon: options.srcFolder + '/favicon/**/*',
+    jsonPug: options.srcFolder + '/pug/json/**/*.json',
+    tmpFontsCss: options.srcFolder + options.tmpFolder + '*.css',
+    tmpData: options.srcFolder + options.tmpFolder + options.dataName
 };
 
 // массив javascript
 const allJavaScripts = [ // подключаем все скрипты проекта здесь. причём в каком порядке подключим в том и собирётся
-    PATHS.node + '/foundation-sites/dist/js/foundation.min.js', // foundation js
-    options.devFolder + '/javascript/app.js', // главный файл для работы с js. Подключать последним
+    PATHS.nodeFolder + '/foundation-sites/dist/js/foundation.min.js', // foundation js
+    options.srcFolder + '/javascript/app.js', // главный файл для работы с js. Подключать последним
 ];
 
 
 // del
 gulp.task('clean', function () { // удаляет всю папку генерируемую в продакшен или при разработке
-    return del.sync([options.distFolder, options.devFolder + options.tmpFolder]);
+    return del.sync([options.publicFolder, options.srcFolder + options.tmpFolder]);
 })
 ;
 
 
 // Компиляция pug 
 gulp.task('pug', ['pug:data'], function () { // если надо конвертнуть html в pug http://html2jade.org/ и http://html2pug.herokuapp.com/
-        return gulp.src(PATHS.pug) // берём все файлы
+        return gulp.src(PATHS.pugPages) // берём все файлы
             .pipe($.data(function (file) {
                 return JSON.parse(fs.readFileSync(PATHS.tmpData)); // берём json
             }))
@@ -80,7 +79,7 @@ gulp.task('pug', ['pug:data'], function () { // если надо конверт
             .pipe($.size({
                 title: 'pug'
             }))
-            .pipe(gulp.dest(options.distFolder))
+            .pipe(gulp.dest(options.publicFolder))
     }
 )
 ;
@@ -103,14 +102,14 @@ gulp.task('pug:data', function () {
             message: "<%= error.message %>",
             title: "JSON Error"
         }))
-        .pipe(gulp.dest(options.devFolder + options.tmpFolder));
+        .pipe(gulp.dest(options.srcFolder + options.tmpFolder));
 });
 
 
 // Копируем php
 gulp.task('php', function () {
-    return gulp.src(options.devFolder + './php/**/*') // берём все php
-        .pipe(gulp.dest(options.distFolder + '/php')); // переносим в public
+    return gulp.src(options.srcFolder + '/php/**/*.php') // берём все php
+        .pipe(gulp.dest(options.publicFolder + '/php')); // переносим в public
 })
 ;
 // Работа с картинками
@@ -143,7 +142,7 @@ gulp.task('img', function () {
             .pipe($.size({
                 title: 'images'
             }))
-            .pipe(gulp.dest(options.distFolder + '/images')) // Выгружаем на продакшен
+            .pipe(gulp.dest(options.publicFolder + '/images')) // Выгружаем на продакшен
     }
 )
 ;
@@ -165,7 +164,7 @@ gulp.task('cache', function (done) {
 gulp.task('fonts-style', ['generate-fonts'], function () {
         return gulp.src(PATHS.tmpFontsCss)
             .pipe($.concat('_fonts.scss'))
-            .pipe(gulp.dest(options.devFolder + '/stylesheet'))
+            .pipe(gulp.dest(options.srcFolder + '/stylesheet'))
     }
 )
 ;
@@ -176,7 +175,7 @@ gulp.task('generate-fonts', function () {
                 fontPath: '../fonts/', // добавляем в путь
                 asFileName: true, // по названию файла шрифта генерируется название font-family
             }))
-            .pipe(gulp.dest(options.devFolder + options.tmpFolder)) // переносим в tmp
+            .pipe(gulp.dest(options.srcFolder + options.tmpFolder)) // переносим в tmp
     }
 )
 ;
@@ -184,11 +183,11 @@ gulp.task('generate-fonts', function () {
 
 // Копируем fonts
 gulp.task('fonts', ['fonts-style'], function () {
-        return gulp.src(options.devFolder + options.tmpFolder + '*.{eot,svg,ttf,woff}') // берём все шрифты в папке tmp
+        return gulp.src(options.srcFolder + options.tmpFolder + '*.{eot,svg,ttf,woff}') // берём все шрифты в папке tmp
             .pipe($.size({
                 title: 'fonts'
             }))
-            .pipe(gulp.dest(options.distFolder + '/fonts')) // переносим в public
+            .pipe(gulp.dest(options.publicFolder + '/fonts')) // переносим в public
     }
 )
 ;
@@ -226,7 +225,7 @@ gulp.task('favicon', function () {
         ], {
             verbose: true
         })))
-        .pipe(gulp.dest(options.distFolder + '/favicon'));
+        .pipe(gulp.dest(options.publicFolder + '/favicon'));
 })
 ;
 
@@ -250,7 +249,7 @@ gulp.task('sass', function () {
         .pipe($.size({
             title: 'css'
         }))
-        .pipe(gulp.dest(options.distFolder + '/stylesheet')) // выгружаем
+        .pipe(gulp.dest(options.publicFolder + '/stylesheet')) // выгружаем
         .pipe(browserSync.stream()); // инжектим без перезагрузки
 })
 ;
@@ -284,7 +283,7 @@ gulp.task('scripts', ['lint'], function () { // берём все файлы с�
             .pipe($.size({
                 title: 'js'
             }))
-            .pipe(gulp.dest(options.distFolder + '/javascript')) // Выгружаем в папку
+            .pipe(gulp.dest(options.publicFolder + '/javascript')) // Выгружаем в папку
     }
 )
 ;
@@ -322,7 +321,7 @@ gulp.task('serve', [
 ], function () {
 
     browserSync.init({
-        server: options.distFolder,
+        server: options.publicFolder,
         notify: options.notify,
     });
 
@@ -353,7 +352,7 @@ gulp.task('default', ['serve'], function () {
 
 // Архивирование проекта
 gulp.task('zip', ['production'], function () {
-    gulp.src(options.distFolder + '/**/*')
+    gulp.src(options.publicFolder + '/**/*')
         .pipe($.zip(options.appName + '.zip'))
         .pipe($.size({
             title: options.appName + '.zip'
