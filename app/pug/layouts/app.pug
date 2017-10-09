@@ -5,27 +5,34 @@ include ../include/mixins
 //- Шаблон вёрстки
 doctype html
 html(lang="ru")
-	head
-		meta(charset="UTF-8")
-		meta(http-equiv="X-UA-Compatible" content="IE=edge")
-		meta(name="viewport" content="width=device-width, initial-scale=1")
-		//- include favicons http://realfavicongenerator.net/
-		include ../favicon/favicon.pug
-		//- ###include favicons
-		//- app stylesheet
-		link(rel="stylesheet" href="stylesheet/app.css")
-		//- ###app stylesheet
-		//- cdn jquery
-		script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
-		//- ###cdn jquery
-		block title
-	body
-		#offCanvas.off-canvas.position-left(data-off-canvas)
-			include ../include/mobile-menu.pug
-		.off-canvas-content(data-off-canvas-content)
-			include ../include/header.pug
-			block content
-			include ../include/footer.pug
-			block scripts
-				script(src="javascript/app.min.js" async)
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+
+        //- include favicons http://realfavicongenerator.net/
+        include ../favicon/favicon.pug
+        //- ###include favicons
+
+        //- app stylesheet
+        link(rel="stylesheet" href="stylesheet/app.css")
+        //- ###app stylesheet
+
+        //- cdn jquery
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
+        //- ###cdn jquery
+
+        //- блок с title
+        block title
+        //- ###блок с title
+
+    body
+        #offCanvas.off-canvas.position-left(data-off-canvas)
+            include ../include/mobile-menu.pug
+        .off-canvas-content(data-off-canvas-content)
+            include ../include/header.pug
+            block content
+            include ../include/footer.pug
+            block scripts
+                script(src="javascript/app.min.js" async)
 //- ###Шаблон вёрстки
