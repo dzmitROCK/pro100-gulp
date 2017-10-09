@@ -1,6 +1,9 @@
 @import "fonts";
 
+$firstColor: darkcyan;
+
 $body-font-family: 'open-sans', "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+$topbar-background: lighten($firstColor, 50%);
 
 body {
   font-family: $body-font-family;
@@ -11,20 +14,8 @@ body {
   background-size: cover;
 }
 
-$firstColor: crimson;
-header {
-  background-color: darken($firstColor, 30%);
-  a {
-    color: #fff;
-    transition: ease-in-out 0.2s;
-    &:hover {
-      color: $firstColor;
-    }
-  }
-}
-
 #article {
-  background-color: darken($firstColor, 20%);
+  background-color: darken($firstColor, 10%);
   min-height: 100vh;
   color: #fff;
   img {
@@ -36,12 +27,12 @@ header {
 }
 
 #sidebar {
-  background-color: lighten($firstColor, 15%);
+  background-color: lighten($firstColor, 5%);
   color: #fff;
 }
 
 #footer {
-  background-color: darken($firstColor, 40%);
+  background-color: darken($firstColor, 20%);
   color: #fff;
 }
 
