@@ -94,13 +94,14 @@ gulp.task('pug:watch', ['pug'], function (done) {
 // data json 
 gulp.task('pug:data', function () {
     return gulp.src(PATHS.jsonPug)
-        .pipe($.plumber())
+        .pipe($.plumber({
+            errorHandler: $.notify.onError({
+                message: "<%= error.message %>",
+                title: "JSON Error"
+            })
+        }))
         .pipe($.mergeJson({
             fileName: options.dataName
-        }))
-        .on('error', $.notify.onError({
-            message: "<%= error.message %>",
-            title: "JSON Error"
         }))
         .pipe(gulp.dest(options.srcFolder + options.tmpFolder));
 });
@@ -263,7 +264,7 @@ gulp.task('lint', function () {
                 return false;
             }
 
-            let errors = file.jshint.results.map(function (data) {
+            var errors = file.jshint.results.map(function (data) {
                 if (data.error) {
                     return "(" + data.error.line + ':' + data.error.character + ') ' + data.error.reason;
                 }
