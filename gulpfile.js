@@ -70,8 +70,35 @@ const PATHS = {
 };
 
 // массив javascript
-const allJavaScripts = [ // подключаем все скрипты проекта здесь. причём в каком порядке подключим в том и собирётся
-    PATHS.nodeFolder + '/foundation-sites/dist/js/foundation.min.js', // foundation js
+const allJavaScripts = [ // подключаем все скрипты проекта здесь. в каком порядке подключим в том и собирётся
+
+    // все плагины foundation
+    // если что то в проекте не используем то надо закомментировать
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.core.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.util.*.js',
+
+    // Paths to individual JS components defined below
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.abide.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.accordion.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.accordionMenu.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.drilldown.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.dropdown.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.dropdownMenu.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.equalizer.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.interchange.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.magellan.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.offcanvas.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.orbit.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.responsiveMenu.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.responsiveToggle.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.reveal.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.slider.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.sticky.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.tabs.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.toggler.js',
+    PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.tooltip.js',
+    // ###все плагины foundation
+
     options.srcFolder + '/javascript/app.js', // главный файл для работы с js. Подключать последним
 ];
 
