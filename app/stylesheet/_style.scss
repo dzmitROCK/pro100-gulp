@@ -1,12 +1,17 @@
 @import "fonts";
+
 $body-font-family: 'open-sans', "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
 
 body {
   font-family: $body-font-family;
-
+  background-image: url(../images/bg.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
-$firstColor: gray;
+$firstColor: crimson;
 header {
   background-color: darken($firstColor, 30%);
   a {

@@ -20,7 +20,6 @@ gulp.task('plug', function () { // посмотрим какие плагины 
 // Опции
 const options = {
     appName: 'app', // когда пакуем в zip то будет это название
-    imgQuality: 'medium', // качество картинок на выходе low, medium, high and veryhigh
     htmlMin: false, // false не сжимем pug на выходе, true сжимаем
     notify: false, // false отключает чудо-надоедливые посказки browser-sync
     srcFolder: 'app', // рабочая папка(если переименовываем папку разработки то и здесь меняем)
@@ -31,9 +30,30 @@ const options = {
         'Android >= 2.3'
     ], // на сколько версий браузеров ставить префиксы
     dataName: 'data.json',
-    tmpFolder: '/tmp/'
+    tmpFolder: '/tmp/',
+    imgConfig: [ // настройка оптимизации картинок
+        $.imagemin.gifsicle({
+            interlaced: true
+        }),
+        $.imagemin.jpegtran({
+            progressive: true
+        }),
+        imageminJpegRecompress({
+            loops: 5,
+            min: 65,
+            max: 70,
+            quality: 'low', // качество картинок на выходе low, medium, high and veryhigh
+        }),
+        $.imagemin.svgo(),
+        $.imagemin.optipng({
+            optimizationLevel: 3
+        }),
+        pngquant({
+            quality: '65-70',
+            speed: 5
+        })],
 };
-
+// 364,98
 // Пути к файлам
 const PATHS = {
     nodeFolder: 'node_modules',
@@ -59,8 +79,7 @@ const allJavaScripts = [ // подключаем все скрипты прое�
 // del
 gulp.task('clean', function () { // удаляет всю папку генерируемую в продакшен или при разработке
     return del.sync([options.publicFolder, options.srcFolder + options.tmpFolder]);
-})
-;
+});
 
 
 // Компиляция pug 
@@ -81,14 +100,12 @@ gulp.task('pug', ['pug:data'], function () { // если надо конверт
             }))
             .pipe(gulp.dest(options.publicFolder))
     }
-)
-;
+);
 
 gulp.task('pug:watch', ['pug'], function (done) {
     browserSync.reload();
     done();
-})
-;
+});
 
 
 // data json 
@@ -111,64 +128,41 @@ gulp.task('pug:data', function () {
 gulp.task('php', function () {
     return gulp.src(options.srcFolder + '/php/**/*.php') // берём все php
         .pipe(gulp.dest(options.publicFolder + '/php')); // переносим в public
-})
-;
+});
+
+
 // Работа с картинками
 gulp.task('img', function () {
         return gulp.src(PATHS.images) // Берем все изображения
-            .pipe($.cache($.imagemin([
-                $.imagemin.gifsicle({
-                    interlaced: true
-                }),
-                $.imagemin.jpegtran({
-                    progressive: true
-                }),
-                imageminJpegRecompress({
-                    loops: 5,
-                    min: 65,
-                    max: 70,
-                    quality: options.imgQuality
-                }),
-                $.imagemin.svgo(),
-                $.imagemin.optipng({
-                    optimizationLevel: 3
-                }),
-                pngquant({
-                    quality: '65-70',
-                    speed: 5
-                })
-            ], {
-                verbose: true
-            })))
+            .pipe($.cache(
+                $.imagemin(options.imgConfig, {
+                    verbose: true
+                })))
             .pipe($.size({
                 title: 'images'
             }))
             .pipe(gulp.dest(options.publicFolder + '/images')) // Выгружаем на продакшен
     }
-)
-;
+);
 
 
 gulp.task('img:watch', ['img'], function (done) {
     browserSync.reload();
     done();
-})
-;
+});
 
 // Чистка кэша
 gulp.task('cache', function (done) {
     $.cached.caches = {};
     return $.cache.clearAll(done);
-})
-;
+});
 
 gulp.task('fonts-style', ['generate-fonts'], function () {
         return gulp.src(PATHS.tmpFontsCss)
             .pipe($.concat('_fonts.scss'))
             .pipe(gulp.dest(options.srcFolder + '/stylesheet'))
     }
-)
-;
+);
 
 gulp.task('generate-fonts', function () {
         return gulp.src(PATHS.fonts) // берём все шрифты в папке fonts
@@ -178,8 +172,7 @@ gulp.task('generate-fonts', function () {
             }))
             .pipe(gulp.dest(options.srcFolder + options.tmpFolder)) // переносим в tmp
     }
-)
-;
+);
 
 
 // Копируем fonts
@@ -190,45 +183,22 @@ gulp.task('fonts', ['fonts-style'], function () {
             }))
             .pipe(gulp.dest(options.publicFolder + '/fonts')) // переносим в public
     }
-)
-;
+);
 
 gulp.task('fonts:watch', ['fonts'], function (done) {
     browserSync.reload();
     done();
 });
 
-
 // Копируем favicon
 gulp.task('favicon', function () {
     return gulp.src(['!app/favicon/readme.md', PATHS.favicon])
-        .pipe($.cache($.imagemin([
-            $.imagemin.gifsicle({
-                interlaced: true
-            }),
-            $.imagemin.jpegtran({
-                progressive: true
-            }),
-            imageminJpegRecompress({
-                loops: 5,
-                min: 65,
-                max: 70,
-                quality: options.imgQuality
-            }),
-            $.imagemin.svgo(),
-            $.imagemin.optipng({
-                optimizationLevel: 3
-            }),
-            pngquant({
-                quality: '65-70',
-                speed: 5
-            })
-        ], {
-            verbose: true
-        })))
+        .pipe($.cache(
+            $.imagemin(options.imgConfig, {
+                verbose: true
+            })))
         .pipe(gulp.dest(options.publicFolder + '/favicon'));
-})
-;
+});
 
 
 // Компилим sass || scss
@@ -252,8 +222,7 @@ gulp.task('sass', function () {
         }))
         .pipe(gulp.dest(options.publicFolder + '/stylesheet')) // выгружаем
         .pipe(browserSync.stream()); // инжектим без перезагрузки
-})
-;
+});
 
 
 gulp.task('lint', function () {
@@ -271,7 +240,7 @@ gulp.task('lint', function () {
             }).join("\n");
             return file.relative + " (" + file.jshint.results.length + " errors)\n" + errors;
         }));
-})
+});
 
 
 // javascripts
@@ -286,8 +255,7 @@ gulp.task('scripts', ['lint'], function () { // берём все файлы с�
             }))
             .pipe(gulp.dest(options.publicFolder + '/javascript')) // Выгружаем в папку
     }
-)
-;
+);
 
 
 gulp.task('js:watch', ['scripts'], function (done) {
@@ -304,8 +272,7 @@ gulp.task('watch', function () {
     gulp.watch(PATHS.images, ['img:watch']); // наблюдаем за файлами и при изменениях выполняем таск
     gulp.watch(PATHS.js, ['js:watch']); // наблюдаем за файлами и при изменениях выполняем таск
     gulp.watch(PATHS.php, ['php']); // наблюдаем за файлами и при изменениях выполняем таск
-})
-;
+});
 
 
 // Запускаем сервер
@@ -326,8 +293,7 @@ gulp.task('serve', [
         notify: options.notify,
     });
 
-})
-;
+});
 
 
 // prod task
@@ -347,8 +313,7 @@ gulp.task('production', [
 // defaul task
 gulp.task('default', ['serve'], function () {
     console.log('Поехали!!!');
-})
-;
+});
 
 
 // Архивирование проекта
