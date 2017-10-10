@@ -1,0 +1,6 @@
+{
+    "host": "host",
+    "user": "user",
+    "password": "pass",
+    "folderOnServer": "/"
+}

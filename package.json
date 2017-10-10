@@ -9,7 +9,8 @@
     "production": "gulp production --production",
     "zip": "gulp zip --production",
     "plug": "gulp plug",
-    "cacheme": "gulp cache"
+    "cacheme": "gulp cache",
+    "deploy": "gulp deploy --production"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,7 @@
     "imagemin-jpeg-recompress": "^5.1.0",
     "imagemin-pngquant": "^5.0.0",
     "jshint": "^2.9.5",
+    "vinyl-ftp": "^0.6.0",
     "yargs": "^9.0.1"
   },
   "dependencies": {

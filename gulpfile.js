@@ -7,13 +7,15 @@ const gulp = require('gulp'), // Сам галп
     path = require('path'), // скоро понадобится
     imageminJpegRecompress = require('imagemin-jpeg-recompress'),
     fs = require('fs'),
+    gutil = require('gulp-util'),
     pngquant = require('imagemin-pngquant'),
+    ftp = require('vinyl-ftp'), // деплой на хостинг
     argv = require('yargs').argv; // Подключаем библиотеку для работы с png
 
 // включаем флаги команд
 const isProduction = !!(argv.production);
 
-gulp.task('plug', function () { // посмотрим какие плагины подключились и какие названия
+gulp.task('plug', function() { // посмотрим какие плагины подключились и какие названия
     console.log($);
 });
 
@@ -51,9 +53,11 @@ const options = {
         pngquant({
             quality: '65-70',
             speed: 5
-        })],
+        })
+    ]
 };
-// 364,98
+
+
 // Пути к файлам
 const PATHS = {
     nodeFolder: 'node_modules',
@@ -106,39 +110,38 @@ const allJavaScripts = [ // подключаем все скрипты прое�
 
 
 // del
-gulp.task('clean', function () { // удаляет всю папку генерируемую в продакшен или при разработке
+gulp.task('clean', function() { // удаляет всю папку генерируемую в продакшен или при разработке
     return del.sync([options.publicFolder, options.srcFolder + options.tmpFolder]);
 });
 
 
 // Компиляция pug 
-gulp.task('pug', ['pug:data'], function () { // если надо конвертнуть html в pug http://html2jade.org/ и http://html2pug.herokuapp.com/
-        return gulp.src(PATHS.pugPages) // берём все файлы
-            .pipe($.data(function (file) {
-                return JSON.parse(fs.readFileSync(PATHS.tmpData)); // берём json
-            }))
-            .pipe($.pug({ // компилим в pug
-                pretty: !options.htmlMin,
-            }))
-            .on('error', $.notify.onError({
-                message: "<%= error.message %>",
-                title: "Pug Error"
-            }))
-            .pipe($.size({
-                title: 'pug'
-            }))
-            .pipe(gulp.dest(options.publicFolder))
-    }
-);
+gulp.task('pug', ['pug:data'], function() { // если надо конвертнуть html в pug http://html2jade.org/ и http://html2pug.herokuapp.com/
+    return gulp.src(PATHS.pugPages) // берём все файлы
+        .pipe($.data(function(file) {
+            return JSON.parse(fs.readFileSync(PATHS.tmpData)); // берём json
+        }))
+        .pipe($.pug({ // компилим в pug
+            pretty: !options.htmlMin,
+        }))
+        .on('error', $.notify.onError({
+            message: "<%= error.message %>",
+            title: "Pug Error"
+        }))
+        .pipe($.size({
+            title: 'pug'
+        }))
+        .pipe(gulp.dest(options.publicFolder))
+});
 
-gulp.task('pug:watch', ['pug'], function (done) {
+gulp.task('pug:watch', ['pug'], function(done) {
     browserSync.reload();
     done();
 });
 
 
 // data json 
-gulp.task('pug:data', function () {
+gulp.task('pug:data', function() {
     return gulp.src(PATHS.jsonPug)
         .pipe($.plumber({
             errorHandler: $.notify.onError({
@@ -154,73 +157,73 @@ gulp.task('pug:data', function () {
 
 
 // Копируем php
-gulp.task('php', function () {
+gulp.task('php', function() {
     return gulp.src(options.srcFolder + '/php/**/*.php') // берём все php
         .pipe(gulp.dest(options.publicFolder + '/php')); // переносим в public
 });
 
 
 // Работа с картинками
-gulp.task('img', function () {
-        return gulp.src(PATHS.images) // Берем все изображения
-            .pipe($.cache(
-                $.imagemin(options.imgConfig, {
-                    verbose: true
-                })))
-            .pipe($.size({
-                title: 'images'
-            }))
-            .pipe(gulp.dest(options.publicFolder + '/images')) // Выгружаем на продакшен
-    }
-);
+gulp.task('img', function() {
+    return gulp.src(PATHS.images) // Берем все изображения
+        .pipe($.cache(
+            $.imagemin(options.imgConfig, {
+                verbose: true
+            })))
+        .pipe($.size({
+            title: 'images'
+        }))
+        .pipe(gulp.dest(options.publicFolder + '/images')) // Выгружаем на продакшен
+});
 
 
-gulp.task('img:watch', ['img'], function (done) {
+gulp.task('img:watch', ['img'], function(done) {
     browserSync.reload();
     done();
 });
 
 // Чистка кэша
-gulp.task('cache', function (done) {
+gulp.task('cache', function(done) {
     $.cached.caches = {};
     return $.cache.clearAll(done);
 });
 
-gulp.task('fonts-style', ['generate-fonts'], function () {
-        return gulp.src(PATHS.tmpFontsCss)
-            .pipe($.concat('_fonts.scss'))
-            .pipe(gulp.dest(options.srcFolder + '/stylesheet'))
-    }
-);
 
-gulp.task('generate-fonts', function () {
-        return gulp.src(PATHS.fonts) // берём все шрифты в папке fonts
-            .pipe($.fontmin({ // генерируем шрифты
-                fontPath: '../fonts/', // добавляем в путь
-                asFileName: true, // по названию файла шрифта генерируется название font-family
-            }))
-            .pipe(gulp.dest(options.srcFolder + options.tmpFolder)) // переносим в tmp
-    }
-);
+gulp.task('fonts-style', ['generate-fonts'], function() {
+    return gulp.src(PATHS.tmpFontsCss)
+        .pipe($.concat('_fonts.scss'))
+        .pipe(gulp.dest(options.srcFolder + '/stylesheet'))
+});
+
+
+gulp.task('generate-fonts', function() {
+    return gulp.src(PATHS.fonts) // берём все шрифты в папке fonts
+        .pipe($.fontmin({ // генерируем шрифты
+            fontPath: '../fonts/', // добавляем в путь
+            asFileName: true, // по названию файла шрифта генерируется название font-family
+        }))
+        .pipe(gulp.dest(options.srcFolder + options.tmpFolder)) // переносим в tmp
+});
 
 
 // Копируем fonts
-gulp.task('fonts', ['fonts-style'], function () {
-        return gulp.src(options.srcFolder + options.tmpFolder + '*.{eot,svg,ttf,woff}') // берём все шрифты в папке tmp
-            .pipe($.size({
-                title: 'fonts'
-            }))
-            .pipe(gulp.dest(options.publicFolder + '/fonts')) // переносим в public
-    }
-);
+gulp.task('fonts', ['fonts-style'], function() {
+    return gulp.src(options.srcFolder + options.tmpFolder + '*.{eot,svg,ttf,woff}') // берём все шрифты в папке tmp
+        .pipe($.size({
+            title: 'fonts'
+        }))
+        .pipe(gulp.dest(options.publicFolder + '/fonts')) // переносим в public
+});
 
-gulp.task('fonts:watch', ['fonts'], function (done) {
+
+gulp.task('fonts:watch', ['fonts'], function(done) {
     browserSync.reload();
     done();
 });
 
+
 // Копируем favicon
-gulp.task('favicon', function () {
+gulp.task('favicon', function() {
     return gulp.src(['!app/favicon/readme.md', PATHS.favicon])
         .pipe($.cache(
             $.imagemin(options.imgConfig, {
@@ -231,7 +234,7 @@ gulp.task('favicon', function () {
 
 
 // Компилим sass || scss
-gulp.task('sass', function () {
+gulp.task('sass', function() {
     return gulp.src(PATHS.sass) // берём все файлы
         .pipe($.if(!isProduction, $.sourcemaps.init())) // sourcemap при разработке
         .pipe($.sass()
@@ -254,15 +257,15 @@ gulp.task('sass', function () {
 });
 
 
-gulp.task('lint', function () {
+gulp.task('lint', function() {
     return gulp.src('app/javascript/**/*.js')
         .pipe($.jshint())
-        .pipe($.notify(function (file) {
+        .pipe($.notify(function(file) {
             if (file.jshint.success) {
                 return false;
             }
 
-            var errors = file.jshint.results.map(function (data) {
+            var errors = file.jshint.results.map(function(data) {
                 if (data.error) {
                     return "(" + data.error.line + ':' + data.error.character + ') ' + data.error.reason;
                 }
@@ -273,28 +276,27 @@ gulp.task('lint', function () {
 
 
 // javascripts
-gulp.task('scripts', ['lint'], function () { // берём все файлы скриптов
-        return gulp.src(allJavaScripts) //
-            .pipe($.if(!isProduction, $.sourcemaps.init())) // sourcemap при разработке
-            .pipe($.concat('app.min.js')) // Собираем их в кучу в новом файле
-            .pipe($.if(isProduction, $.uglify())) // Сжимаем JS файл если на продакшен
-            .pipe($.if(!isProduction, $.sourcemaps.write())) // sourcemap при разработке
-            .pipe($.size({
-                title: 'js'
-            }))
-            .pipe(gulp.dest(options.publicFolder + '/javascript')) // Выгружаем в папку
-    }
-);
+gulp.task('scripts', ['lint'], function() { // берём все файлы скриптов
+    return gulp.src(allJavaScripts) //
+        .pipe($.if(!isProduction, $.sourcemaps.init())) // sourcemap при разработке
+        .pipe($.concat('app.min.js')) // Собираем их в кучу в новом файле
+        .pipe($.if(isProduction, $.uglify())) // Сжимаем JS файл если на продакшен
+        .pipe($.if(!isProduction, $.sourcemaps.write())) // sourcemap при разработке
+        .pipe($.size({
+            title: 'js'
+        }))
+        .pipe(gulp.dest(options.publicFolder + '/javascript')) // Выгружаем в папку
+});
 
 
-gulp.task('js:watch', ['scripts'], function (done) {
+gulp.task('js:watch', ['scripts'], function(done) {
     browserSync.reload();
     done();
 });
 
 
 // смотрим за файлами
-gulp.task('watch', function () {
+gulp.task('watch', function() {
     gulp.watch(PATHS.sass, ['sass']); // наблюдаем за файлами и при изменениях выполняем таск
     gulp.watch([PATHS.allPug, PATHS.jsonPug], ['pug:watch']); // наблюдаем за файлами и при изменениях выполняем таск
     gulp.watch(PATHS.fonts, ['fonts:watch']); // наблюдаем за файлами и при изменениях выполняем таск
@@ -315,7 +317,7 @@ gulp.task('serve', [
     'sass',
     'pug',
     'watch'
-], function () {
+], function() {
 
     browserSync.init({
         server: options.publicFolder,
@@ -338,15 +340,31 @@ gulp.task('production', [
     'pug'
 ]);
 
+gulp.task('deploy', ['production'], function() {
+
+    const ftpOpt = JSON.parse(fs.readFileSync('deploy.json')); // берём настройки из json
+
+    var conn = ftp.create({
+        host: ftpOpt.host,
+        user: ftpOpt.user,
+        password: ftpOpt.password,
+        parallel: 10,
+        log: gutil.log
+    });
+
+    return gulp.src(options.publicFolder + '/**/*', { buffer: false })
+        .pipe(conn.dest(ftpOpt.folderOnServer));
+
+});
 
 // defaul task
-gulp.task('default', ['serve'], function () {
+gulp.task('default', ['serve'], function() {
     console.log('Поехали!!!');
 });
 
 
 // Архивирование проекта
-gulp.task('zip', ['production'], function () {
+gulp.task('zip', ['production'], function() {
     gulp.src(options.publicFolder + '/**/*')
         .pipe($.zip(options.appName + '.zip'))
         .pipe($.size({
