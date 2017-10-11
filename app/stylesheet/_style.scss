@@ -2,40 +2,40 @@
 
 $firstColor: darkcyan;
 
-$body-font-family: 'open-sans', "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+$body-font-family: 'open-sans',
+"Helvetica Neue",
+Helvetica,
+Roboto,
+Arial,
+sans-serif;
 $topbar-background: lighten($firstColor, 50%);
 
 body {
-  font-family: $body-font-family;
-  background-image: url(../images/bg.png);
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
+    font-family: $body-font-family;
+    background-image: url(../images/bg.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 #article {
-  background-color: darken($firstColor, 10%);
-  min-height: 100vh;
-  color: #fff;
-  img {
-    width: 100%;
-  }
-  .rip {
-    margin-top: 1rem;
-  }
+    img {
+        display: block;
+        width: 100%;
+    }
 }
 
-#sidebar {
-  background-color: lighten($firstColor, 5%);
-  color: #fff;
+#sidebar.callout {
+    background-color: lighten($firstColor, 5%);
+    color: $white;
 }
 
 #footer {
-  background-color: darken($firstColor, 20%);
-  color: #fff;
+    background-color: darken($firstColor, 20%);
+    color: #fff;
 }
 
 .margin {
-  margin: 2rem 0;
+    margin: 2rem 0;
 }

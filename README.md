@@ -4,8 +4,8 @@
 Все настройки в `gulpfile.js`   
 Настройки деплоя на хостинг в `deploy.json`   
 ##### Установка
-* `git clone https://github.com/dzmitROCK/starter-mini-gulp.git` клонируем репозиторий
-* `cd starter-mini-gulp` переходим в папку проекта
+* `git clone https://github.com/dzmitROCK/starter-mini-gulp.git my-project` клонируем репозиторий
+* `cd my-project` переходим в папку проекта
 * `yarn` устанавливаем все зависимости и пакеты  
 * в `.gitignore` добавляем строчку `deploy.json` чтобы не попали в репозиторий настройки ftp     
 ##### Использование

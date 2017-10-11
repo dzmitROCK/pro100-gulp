@@ -10,18 +10,14 @@ block title
 block content
 	.row.margin
 		article#article.large-8.columns
-			hr
-			h1 #{hello} #{name}
-			hr
-			.vidos
-				.callout.warning.rip
-					.responsive-embed
-						iframe(src='https://www.youtube.com/embed/wFKBN3MGUGI?showinfo=0&autoplay=1&rel=0&start=96', frameborder='0', allowfullscreen)
-			hr
-			h5 Картинка для проверки оптимизации
-			hr
-			img(src='images/088.jpg', alt= name title= name).img-responsive
-			hr
-			img(src="images/pro.jpg" alt= name title= name).img-responsive
-			hr
-		include include/sidebar.pug
+			.callout
+				h1 #{hello} #{name}
+				hr
+				h5 Картинки для проверки оптимизации
+				hr
+				img(src='images/000.jpg', alt= name title= name).img-responsive
+				hr
+				img(src="images/pro.jpg" alt= name title= name).img-responsive
+				hr
+		.large-4.columns
+			include modules/sidebar.pug

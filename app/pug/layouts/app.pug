@@ -1,5 +1,5 @@
 //- подключаем файл с миксинами
-include ../include/mixins
+include ../mixins/main
 //- ###подключаем файл с миксинами
 
 //- Шаблон вёрстки
@@ -10,17 +10,9 @@ html(lang="ru")
         meta(http-equiv="X-UA-Compatible" content="IE=edge")
         meta(name="viewport" content="width=device-width, initial-scale=1")
 
-        //- include favicons http://realfavicongenerator.net/
+        //- подключаем favicons, а генерируем здесь http://realfavicongenerator.net/
         include ../favicon/favicon.pug
-        //- ###include favicons
-
-        //- app stylesheet
-        link(rel="stylesheet" href="stylesheet/app.css")
-        //- ###app stylesheet
-
-        //- cdn jquery
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
-        //- ###cdn jquery
+        //- ###подключаем favicons, а генерируем здесь http://realfavicongenerator.net/
 
         //- блок с title
         block title
@@ -28,11 +20,18 @@ html(lang="ru")
 
     body
         #offCanvas.off-canvas.position-left(data-off-canvas)
-            include ../include/mobile-menu.pug
+            include ../modules/mobile-menu.pug
         .off-canvas-content(data-off-canvas-content)
-            include ../include/header.pug
+            include ../modules/header.pug
             block content
-            include ../include/footer.pug
+            include ../modules/footer.pug
             block scripts
-                script(src="javascript/app.min.js" async)
+                //- cdn jquery
+                script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js' defer)
+                //- ###cdn jquery
+                script(src="javascript/app.min.js" defer)
 //- ###Шаблон вёрстки
+
+//- по совету https://developers.google.com/speed/pagespeed/insights подключаем здесь но можно перенести в блок head
+link(rel="stylesheet" href="stylesheet/app.css")
+//- ###по совету https://developers.google.com/speed/pagespeed/insights подключаем здесь но можно перенести в блок head
