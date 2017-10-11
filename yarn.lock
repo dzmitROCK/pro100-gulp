@@ -103,6 +103,12 @@ ansi-styles@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-2.2.1.tgz#b432dd3358b634cf75e1e4664368240533c1ddbe"
 
+ansi-styles@^3.1.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-3.2.0.tgz#c159b8d5be0f9e5a6f346dab94f16ce022161b88"
+  dependencies:
+    color-convert "^1.9.0"
+
 anymatch@^1.3.0:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-1.3.2.tgz#553dcb8f91e3c889845dfdba34c77721b90b9d7a"
@@ -557,6 +563,14 @@ chalk@^1.0.0, chalk@^1.1.1, chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
+chalk@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.1.0.tgz#ac5becf14fa21b99c6c92ca7a7d7cfd5b17e743e"
+  dependencies:
+    ansi-styles "^3.1.0"
+    escape-string-regexp "^1.0.5"
+    supports-color "^4.0.0"
+
 character-parser@^2.1.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/character-parser/-/character-parser-2.2.0.tgz#c7ce28f36d4bcd9744e5ffc2c5fcde1c73261fc0"
@@ -670,7 +684,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-color-convert@^1.3.0:
+color-convert@^1.3.0, color-convert@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.0.tgz#1accf97dd739b983bf994d56fec8f95853641b7a"
   dependencies:
@@ -2053,21 +2067,21 @@ gulp-if@^2.0.2:
     ternary-stream "^2.0.1"
     through2 "^2.0.1"
 
-gulp-imagemin@^3.2.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/gulp-imagemin/-/gulp-imagemin-3.3.0.tgz#c55764c260593e8595609e66a40126911ef22264"
+gulp-imagemin@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/gulp-imagemin/-/gulp-imagemin-3.4.0.tgz#23a8d4c5133f50a2a708aca87ca4b2d6eb7c4403"
   dependencies:
-    chalk "^1.0.0"
-    gulp-util "^3.0.0"
-    imagemin "^5.0.0"
-    plur "^2.0.0"
+    chalk "^2.1.0"
+    gulp-util "^3.0.8"
+    imagemin "^5.3.1"
+    plur "^2.1.2"
     pretty-bytes "^4.0.2"
-    through2-concurrent "^1.1.0"
+    through2-concurrent "^1.1.1"
   optionalDependencies:
-    imagemin-gifsicle "^5.0.0"
-    imagemin-jpegtran "^5.0.0"
-    imagemin-optipng "^5.1.0"
-    imagemin-svgo "^5.1.0"
+    imagemin-gifsicle "^5.2.0"
+    imagemin-jpegtran "^5.0.2"
+    imagemin-optipng "^5.2.1"
+    imagemin-svgo "^5.2.2"
 
 gulp-jshint@^2.0.4:
   version "2.0.4"
@@ -2325,6 +2339,10 @@ has-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-1.0.0.tgz#9d9e793165ce017a00f00418c43f942a7b1d11fa"
 
+has-flag@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-2.0.0.tgz#e8207af1cc7b30d446cc70b734b5e8be18f88d51"
+
 has-gulplog@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/has-gulplog/-/has-gulplog-0.1.0.tgz#6414c82913697da51590397dafb12f22967811ce"
@@ -2431,7 +2449,7 @@ http-signature@~1.2.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-imagemin-gifsicle@^5.0.0:
+imagemin-gifsicle@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/imagemin-gifsicle/-/imagemin-gifsicle-5.2.0.tgz#3781524c457612ef04916af34241a2b42bfcb40a"
   dependencies:
@@ -2447,7 +2465,7 @@ imagemin-jpeg-recompress@^5.1.0:
     is-jpg "^1.0.0"
     jpeg-recompress-bin "^3.0.1"
 
-imagemin-jpegtran@^5.0.0:
+imagemin-jpegtran@^5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/imagemin-jpegtran/-/imagemin-jpegtran-5.0.2.tgz#e6882263b8f7916fddb800640cf75d2e970d2ad6"
   dependencies:
@@ -2455,7 +2473,7 @@ imagemin-jpegtran@^5.0.0:
     is-jpg "^1.0.0"
     jpegtran-bin "^3.0.0"
 
-imagemin-optipng@^5.1.0:
+imagemin-optipng@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/imagemin-optipng/-/imagemin-optipng-5.2.1.tgz#d22da412c09f5ff00a4339960b98a88b1dbe8695"
   dependencies:
@@ -2471,14 +2489,14 @@ imagemin-pngquant@^5.0.0:
     is-png "^1.0.0"
     pngquant-bin "^3.0.0"
 
-imagemin-svgo@^5.1.0:
+imagemin-svgo@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/imagemin-svgo/-/imagemin-svgo-5.2.2.tgz#501699f5789730a57922b8736ea15c53f7b55838"
   dependencies:
     is-svg "^2.0.0"
     svgo "^0.7.0"
 
-imagemin@^5.0.0:
+imagemin@^5.3.1:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/imagemin/-/imagemin-5.3.1.tgz#f19c2eee1e71ba6c6558c515f9fc96680189a6d4"
   dependencies:
@@ -3897,7 +3915,7 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
-plur@^2.0.0:
+plur@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/plur/-/plur-2.1.2.tgz#7482452c1a0f508e3e344eaec312c91c29dc655a"
   dependencies:
@@ -5036,6 +5054,12 @@ supports-color@^3.2.3:
   dependencies:
     has-flag "^1.0.0"
 
+supports-color@^4.0.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-4.4.0.tgz#883f7ddabc165142b2a61427f3352ded195d1a3e"
+  dependencies:
+    has-flag "^2.0.0"
+
 svgo@^0.7.0:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/svgo/-/svgo-0.7.2.tgz#9f5772413952135c6fefbf40afe6a4faa88b4bb5"
@@ -5112,7 +5136,7 @@ tfunk@^3.0.1:
     chalk "^1.1.1"
     object-path "^0.9.0"
 
-through2-concurrent@^1.0.0, through2-concurrent@^1.1.0:
+through2-concurrent@^1.0.0, through2-concurrent@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/through2-concurrent/-/through2-concurrent-1.1.1.tgz#11cb4ea4c9e31bca6e4c1e6dba48d1c728c3524b"
   dependencies:
