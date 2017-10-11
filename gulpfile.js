@@ -173,7 +173,7 @@ gulp.task('img', function() {
         .pipe($.size({
             title: 'images'
         }))
-        .pipe(gulp.dest(options.publicFolder + '/images')) // Выгружаем на продакшен
+        .pipe(gulp.dest(options.publicFolder + '/images')) // Выгружаем в public
 });
 
 
