@@ -194,7 +194,6 @@ gulp.task('img:watch', ['img'], function(done) {
 
 // Чистка кэша
 gulp.task('cache', function(done) {
-    $.cached.caches = {};
     return $.cache.clearAll(done);
 });
 
