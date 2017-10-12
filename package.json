@@ -1,60 +1,60 @@
 {
-  "name": "pro100-gulp",
-  "version": "1.1.0",
-  "description": "",
-  "main": "gulpfile.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp",
-    "production": "gulp production --production",
-    "zip": "gulp zip --production",
-    "plug": "gulp plug",
-    "cacheme": "gulp cache",
-    "deploy": "gulp deploy --production"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dzmitROCK/starter-mini-gulp.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dzmitROCK/starter-mini-gulp/issues"
-  },
-  "homepage": "https://github.com/dzmitROCK/starter-mini-gulp#readme",
-  "devDependencies": {
-    "browser-sync": "^2.18.8",
-    "del": "^2.2.2",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.1",
-    "gulp-cache": "^0.4.6",
-    "gulp-cached": "^1.1.1",
-    "gulp-clean-css": "^3.4.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssnano": "^2.1.2",
-    "gulp-data": "^1.2.1",
-    "gulp-fontmin": "^0.7.4",
-    "gulp-if": "^2.0.2",
-    "gulp-imagemin": "^3.4.0",
-    "gulp-jshint": "^2.0.4",
-    "gulp-load-plugins": "^1.5.0",
-    "gulp-merge-json": "^1.2.0",
-    "gulp-notify": "^3.0.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-pug": "^3.3.0",
-    "gulp-sass": "^3.1.0",
-    "gulp-size": "^2.1.0",
-    "gulp-sourcemaps": "^2.6.0",
-    "gulp-uglify": "^2.1.2",
-    "gulp-zip": "^4.0.0",
-    "imagemin-jpeg-recompress": "^5.1.0",
-    "imagemin-pngquant": "^5.0.0",
-    "jshint": "^2.9.5",
-    "vinyl-ftp": "^0.6.0",
-    "yargs": "^9.0.1"
-  },
-  "dependencies": {
-    "foundation-sites": "^6.4.3",
-    "jquery": "^3.2.1"
-  }
+    "name": "pro100-gulp",
+    "version": "1.1.0",
+    "description": "",
+    "main": "gulpfile.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "gulp",
+        "production": "gulp production --production",
+        "zip": "gulp zip --production",
+        "plug": "gulp plug",
+        "cacheme": "gulp cache",
+        "deploy": "gulp deploy --production"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dzmitROCK/starter-mini-gulp.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/dzmitROCK/starter-mini-gulp/issues"
+    },
+    "homepage": "https://github.com/dzmitROCK/starter-mini-gulp#readme",
+    "devDependencies": {
+        "browser-sync": "^2.18.8",
+        "del": "^2.2.2",
+        "gulp": "^3.9.1",
+        "gulp-autoprefixer": "^3.1.1",
+        "gulp-cache": "^0.4.6",
+        "gulp-cached": "^1.1.1",
+        "gulp-clean-css": "^3.4.0",
+        "gulp-concat": "^2.6.1",
+        "gulp-cssnano": "^2.1.2",
+        "gulp-data": "^1.2.1",
+        "gulp-fontmin": "^0.7.4",
+        "gulp-if": "^2.0.2",
+        "gulp-imagemin": "^3.4.0",
+        "gulp-jshint": "^2.0.4",
+        "gulp-load-plugins": "^1.5.0",
+        "gulp-merge-json": "^1.2.0",
+        "gulp-notify": "^3.0.0",
+        "gulp-plumber": "^1.1.0",
+        "gulp-pug": "^3.3.0",
+        "gulp-sass": "^3.1.0",
+        "gulp-size": "^2.1.0",
+        "gulp-sourcemaps": "^2.6.0",
+        "gulp-uglify": "^2.1.2",
+        "gulp-zip": "^4.0.0",
+        "imagemin-jpeg-recompress": "^5.1.0",
+        "imagemin-pngquant": "^5.0.0",
+        "jshint": "^2.9.5",
+        "vinyl-ftp": "^0.6.0",
+        "yargs": "^9.0.1"
+    },
+    "dependencies": {
+        "foundation-sites": "^6.4.3",
+        "jquery": "^3.2.1"
+    }
 }
