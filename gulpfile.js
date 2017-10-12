@@ -33,25 +33,31 @@ const options = {
     ], // на сколько версий браузеров ставить префиксы
     dataName: 'data.json',
     tmpFolder: '/tmp/',
-    imgConfig: [ // настройка оптимизации картинок
+    imgConfig: [ // настройка оптимизации картинок // при изменении настроек чистим кэш yarn cacheme
         $.imagemin.gifsicle({
-            interlaced: true
+            interlaced: true,
+            optimizationLevel: 1 // от 1 до 3 более высокие значения занимают больше времени, но могут иметь лучшие результаты.
         }),
         $.imagemin.jpegtran({
             progressive: true
         }),
-        imageminJpegRecompress({
+        imageminJpegRecompress({ // https://github.com/imagemin/imagemin-jpeg-recompress#options
             loops: 5,
-            min: 65,
-            max: 70,
+            min: 25, // минимальное качество
+            max: 65, // макс соответственно
             quality: 'low', // качество картинок на выходе low, medium, high and veryhigh
+            method: 'ssim' // доступные методы mpe, ssim, ms-ssim and smallfry. посмотреть можно https://github.com/danielgtaylor/jpeg-archive#image-comparison-metrics
         }),
-        $.imagemin.svgo(),
-        $.imagemin.optipng({
-            optimizationLevel: 3
+        $.imagemin.svgo({
+            plugins: [
+                { removeViewBox: true }
+            ]
+        }),
+        $.imagemin.optipng({ // https://github.com/imagemin/imagemin-optipng#options
+            optimizationLevel: 3 // от 0 до 7 
         }),
         pngquant({
-            quality: '65-70',
+            quality: '70',
             speed: 5
         })
     ]
