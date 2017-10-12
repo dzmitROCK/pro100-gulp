@@ -26,11 +26,15 @@ const options = {
     notify: false, // false отключает чудо-надоедливые посказки browser-sync
     srcFolder: 'app', // рабочая папка(если переименовываем папку разработки то и здесь меняем)
     publicFolder: 'public', // папка с выходным проектом
-    autoprefixer: [
-        'last 3 versions',
-        'ie >= 9',
-        'Android >= 2.3'
-    ], // на сколько версий браузеров ставить префиксы
+    autoprefixer: { 
+        browsers: [ // префиксы для браузеров
+            'last 3 versions',
+            'ie >= 9',
+            'Android >= 2.3'
+        ],
+        grid: true,
+        cascade: true
+    },
     dataName: 'data.json',
     tmpFolder: '/tmp/',
     imgConfig: [ // настройка оптимизации картинок // при изменении настроек чистим кэш yarn cacheme
@@ -248,10 +252,7 @@ gulp.task('sass', function() {
                 message: "<%= error.message %>",
                 title: "Sass Error"
             })))
-        .pipe($.autoprefixer({
-            browsers: options.autoprefixer,
-            cascade: true
-        })) // добавляем префиксы
+        .pipe($.autoprefixer(options.autoprefixer)) // добавляем префиксы
         .pipe($.if(isProduction, $.cleanCss())) // если на продакшен подчищаем css от неиспользуемых класов и тд (хз как это работает :) )
         .pipe($.if(isProduction, $.cssnano())) // сжимаем если на продакшен
         .pipe($.if(!isProduction, $.sourcemaps.write())) // sourcemap при разработке
