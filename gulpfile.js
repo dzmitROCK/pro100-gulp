@@ -26,7 +26,7 @@ const options = {
     notify: false, // false отключает чудо-надоедливые посказки browser-sync
     srcFolder: 'app', // рабочая папка(если переименовываем папку разработки то и здесь меняем)
     publicFolder: 'public', // папка с выходным проектом
-    autoprefixer: { 
+    autoprefixer: {
         browsers: [ // префиксы для браузеров
             'last 3 versions',
             'ie >= 9',
