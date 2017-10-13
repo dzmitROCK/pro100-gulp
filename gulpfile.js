@@ -261,7 +261,6 @@ gulp.task('sass', function() {
             })))
         .pipe($.autoprefixer(options.autoprefixer)) // добавляем префиксы
         .pipe($.if(isProduction, $.cleanCss())) // если на продакшен подчищаем css от неиспользуемых класов и тд (хз как это работает :) )
-        .pipe($.if(isProduction, $.cssnano())) // сжимаем если на продакшен
         .pipe($.if(!isProduction, $.sourcemaps.write())) // sourcemap при разработке
         .pipe($.size({
             title: 'css'
