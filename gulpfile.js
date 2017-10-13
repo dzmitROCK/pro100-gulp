@@ -23,7 +23,11 @@ gulp.task('plug', function() { // посмотрим какие плагины �
 const options = {
     appName: 'app', // когда пакуем в zip то будет это название
     htmlMin: false, // false не сжимем pug на выходе, true сжимаем
-    notify: false, // false отключает чудо-надоедливые посказки browser-sync
+    browSync: { // настройки browserSync
+        notify: false, // false отключает чудо-надоедливые посказки browser-sync
+        port: 8080, // какой порт использовать
+        https: false // false выключает протокол https
+    },
     srcFolder: 'app', // рабочая папка(если переименовываем папку разработки то и здесь меняем)
     publicFolder: 'public', // папка с выходным проектом
     autoprefixer: {
@@ -327,7 +331,10 @@ gulp.task('serve', [
 
     browserSync.init({
         server: options.publicFolder,
-        notify: options.notify,
+        notify: options.browSync.notify,
+        port: options.browSync.port,
+        https: options.browSync.https,
+        logPrefix: "Pro100-gulp",
     });
 
 });
