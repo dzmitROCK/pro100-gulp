@@ -12,7 +12,7 @@ const gulp = require('gulp'), // Сам галп
     ftp = require('vinyl-ftp'), // деплой на хостинг
     argv = require('yargs').argv; // Подключаем библиотеку для работы с png
 
-// включаем флаги команд
+// включаем флаг production
 const isProduction = !!(argv.production);
 
 gulp.task('plug', function() { // посмотрим какие плагины подключились и какие названия
@@ -90,12 +90,16 @@ const PATHS = {
 // массив javascript
 const allJavaScripts = [ // подключаем все скрипты проекта здесь. в каком порядке подключим в том и собирётся
 
-    // все плагины foundation
-    // если что то в проекте не используем то надо закомментировать
+    /* 
+    подключаем все плагины foundation
+    если что то в проекте не используем то надо закомментировать
+    вся документация по фрейворку https://foundation.zurb.com/sites/docs/ 
+    */
+
     PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.core.js',
     PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.util.*.js',
 
-    // Paths to individual JS components defined below
+    // Пути к отдельным компонентам JS определены ниже
     PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.abide.js',
     PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.accordion.js',
     PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.accordionMenu.js',
