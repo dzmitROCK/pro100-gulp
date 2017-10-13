@@ -14,14 +14,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dzmitROCK/starter-mini-gulp.git"
+        "url": "git+https://github.com/dzmitROCK/pro100-gulp.git"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/dzmitROCK/starter-mini-gulp/issues"
+        "url": "https://github.com/dzmitROCK/pro100-gulp/issues"
     },
-    "homepage": "https://github.com/dzmitROCK/starter-mini-gulp#readme",
+    "homepage": "https://github.com/dzmitROCK/pro100-gulp#readme",
     "devDependencies": {
         "browser-sync": "^2.18.8",
         "del": "^2.2.2",
