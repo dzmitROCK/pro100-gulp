@@ -1,7 +1,7 @@
 {
     "name": "pro100-gulp",
     "version": "1.1.0",
-    "description": "",
+    "description": "Стартовый шаблон для frontend разработки. Gulp, pug, scss",
     "main": "gulpfile.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -16,7 +16,7 @@
         "type": "git",
         "url": "git+https://github.com/dzmitROCK/pro100-gulp.git"
     },
-    "author": "",
+    "author": "dzmitrock",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/dzmitROCK/pro100-gulp/issues"
