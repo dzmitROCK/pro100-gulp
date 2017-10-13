@@ -241,7 +241,7 @@ gulp.task('fonts:watch', ['fonts'], function(done) {
 
 // Копируем favicon
 gulp.task('favicon', function() {
-    return gulp.src(['!app/favicon/readme.md', PATHS.favicon])
+    return gulp.src([PATHS.favicon, '!' + PATHS.favicon + '.md'])
         .pipe($.cache(
             $.imagemin(options.imgConfig, {
                 verbose: true
@@ -272,7 +272,7 @@ gulp.task('sass', function() {
 
 
 gulp.task('lint', function() {
-    return gulp.src('app/javascript/**/*.js')
+    return gulp.src(PATHS.js)
         .pipe($.jshint())
         .pipe($.notify(function(file) {
             if (file.jshint.success) {
