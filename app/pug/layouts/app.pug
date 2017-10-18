@@ -17,21 +17,38 @@ html(lang="ru")
         //- блок с title
         block title
         //- ###блок с title
-
     body
+        //- мобильное меню
         #offCanvas.off-canvas.position-left(data-off-canvas)
             include ../modules/mobile-menu.pug
-        .off-canvas-content(data-off-canvas-content)
-            include ../modules/header.pug
-            block content
-            include ../modules/footer.pug
-            block scripts
-                //- cdn jquery
-                script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js' defer)
-                //- ###cdn jquery
-                script(src="javascript/app.min.js" defer)
-//- ###Шаблон вёрстки
+        //- ###мобильное меню
 
-//- по совету https://developers.google.com/speed/pagespeed/insights подключаем здесь но можно перенести в блок head
+        //- вся страница полностью
+        .off-canvas-content(data-off-canvas-content)
+            //- шапка сайта
+            include ../modules/header.pug
+            //- ###шапка сайта
+
+            //- блок контента
+            block content
+            //- ###блок контента
+
+            //- подключаем футер
+            include ../modules/footer.pug
+            //- ###подключаем футер
+
+            //- блок скриптов
+            block scripts
+            //- cdn jquery
+            script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js' defer)
+            //- ###cdn jquery
+            script(src="javascript/app.min.js" defer)
+            //- ###блок скриптов
+
+        //- ###вся страница полностью
+
+//- по совету https://developers.google.com/speed/pagespeed/insights подключаем здесь но в реальных проектах скорее всего надо перенести в head
 link(rel="stylesheet" href="stylesheet/app.css")
-//- ###по совету https://developers.google.com/speed/pagespeed/insights подключаем здесь но можно перенести в блок head
+//- ###по совету https://developers.google.com/speed/pagespeed/insights подключаем здесь но в реальных проектах скорее всего надо перенести в head
+
+//- ###Шаблон вёрстки
