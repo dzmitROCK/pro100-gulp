@@ -52,6 +52,6 @@
         "yargs": "^9.0.1"
     },
     "dependencies": {
-        "foundation-sites": "^6.4.3",
+        "foundation-sites": "^6.4.3"
     }
 }

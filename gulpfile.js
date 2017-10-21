@@ -62,7 +62,7 @@ const options = {
             ]
         }),
         $.imagemin.optipng({ // https://github.com/imagemin/imagemin-optipng#options
-            optimizationLevel: 3 // от 0 до 7 
+            optimizationLevel: 3 // от 0 до 7
         }),
         pngquant({
             quality: '70',
@@ -90,10 +90,10 @@ const PATHS = {
 // массив javascript
 const allJavaScripts = [ // подключаем все скрипты проекта здесь. в каком порядке подключим в том и собирётся
 
-    /* 
+    /*
     подключаем все плагины foundation
     если что то в проекте не используем то надо закомментировать
-    вся документация по фрейворку https://foundation.zurb.com/sites/docs/ 
+    вся документация по фрейворку https://foundation.zurb.com/sites/docs/
     */
 
     PATHS.nodeFolder + '/foundation-sites/dist/js/plugins/foundation.core.js',
@@ -133,7 +133,7 @@ gulp.task('clean', function() { // удаляет всю папку генери
 });
 
 
-// Компиляция pug 
+// Компиляция pug
 gulp.task('pug', ['pug:data'], function() { // если надо конвертнуть html в pug http://html2jade.org/ и http://html2pug.herokuapp.com/
     return gulp.src(PATHS.pugPages) // берём все файлы
         .pipe($.data(function(file) {
@@ -158,7 +158,7 @@ gulp.task('pug:watch', ['pug'], function(done) {
 });
 
 
-// data json 
+// data json
 gulp.task('pug:data', function() {
     return gulp.src(PATHS.jsonPug)
         .pipe($.plumber({
