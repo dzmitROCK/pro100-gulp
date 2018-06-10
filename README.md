@@ -1,3 +1,4 @@
+# !!!package is obsolete!!!
 ![](https://github.com/dzmitROCK/start/blob/master/app/favicon/android-chrome-512x512.png?raw=true)
 # Стартовый шаблон для вёрстки
 #### Документация в разработке
